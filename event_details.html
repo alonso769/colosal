@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="event-detail-title">Detalles del Evento</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <img src="images/joinnus-logo.png" alt="Logo de la Banda" class="joinnus-header-logo">
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">Inicio</a>
+                    <a href="index.html#proximos-conciertos" class="nav-link">Conciertos</a>
+                    <a href="#" class="nav-link">Nosotros</a>
+                    <a href="#" class="nav-link">Contacto</a>
+                </nav>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline">Iniciar sesión</button>
+                    <button class="btn btn-primary">Registrarse</button>
+                </div>
+                <button class="mobile-menu-btn" aria-label="Abrir menú móvil">☰</button>
+            </div>
+        </div>
+    </header>
+
+    <section class="event-detail-hero">
+        <div class="event-image-banner" id="event-banner-image">
+            <div class="event-info-overlay">
+                <div class="container">
+                    <h1 id="event-detail-name"></h1>
+                    <p class="event-date-time" id="event-detail-date-time"></p>
+                    <p class="event-address" id="event-detail-address"></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="event-details-content">
+        <div class="container">
+            <div class="details-grid">
+                <div class="event-description-col">
+                    <div class="event-info-card">
+                        <h3>Descripción del Evento</h3>
+                        <div id="event-detail-description"></div>
+                        <h3>Información adicional</h3>
+                        <div id="event-detail-additional-info"></div>
+                    </div>
+                </div>
+
+                <div class="event-tickets-col">
+                    <div class="ticket-purchase-card">
+                        <h3>Entradas</h3>
+                        <div id="ticket-types-container">
+                            </div>
+
+                        <div class="discount-code">
+                            <button class="discount-toggle">Códigos de descuento <span class="arrow-icon">▼</span></button>
+                            <div class="discount-input-area">
+                                <input type="text" placeholder="Ingresa tu código de descuento">
+                                <button class="btn btn-primary btn-sm apply-discount-btn">Aplicar</button>
+                            </div>
+                        </div>
+
+                        <p class="legal-notice">
+                            <input type="checkbox" id="privacy-consent">
+                            <label for="privacy-consent">Te informamos que tus datos personales serán compartidos con el organizador del evento.</label>
+                        </p>
+                        <p class="age-notice">
+                            <input type="checkbox" id="age-consent">
+                            <label for="age-consent">Apto solo para mayores de 18 años.</label>
+                        </p>
+
+                        <div class="total-section">
+                            <span>Total:</span>
+                            <span id="total-price">S/ 0.00</span>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-lg purchase-btn">Comprar ahora</button>
+                    </div>
+
+                    <div class="event-organizer-card">
+                        <h3>Organiza</h3>
+                        <div class="organizer-info">
+                            <img src="images/joinnus-logo.png" alt="Logo organizador" class="organizer-logo">
+                            <span id="organizer-name">JOINNUS SAC</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="location-map-card">
+                <h3>Ubicación</h3>
+                <p><strong id="event-detail-city"></strong></p>
+                <p id="event-detail-full-address"></p>
+                <div id="map"></div>
+                <a href="#" target="_blank" class="btn btn-outline view-map-btn" id="view-map-link">Ver mapa</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Joinnus</h3>
+                    <p>Conectando personas a través de eventos y experiencias increíbles en todo el mundo.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Para Asistentes</h4>
+                    <ul>
+                        <li><a href="#">Explorar Eventos</a></li>
+                        <li><a href="#">Mis Entradas</a></li>
+                        <li><a href="#">Centro de Ayuda</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Para Organizadores</h4>
+                    <ul>
+                        <li><a href="#">Crear Evento</a></li>
+                        <li><a href="#">Precios</a></li>
+                        <li><a href="#">Recursos</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Compañía</h4>
+                    <ul>
+                        <li><a href="#">Acerca de Nosotros</a></li>
+                        <li><a href="#">Empleo</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Joinnus. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
