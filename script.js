@@ -195,11 +195,13 @@ const AUTO_SLIDE_DELAY = 3000;
 function setupCarousel() {
     if (carouselSlides.length > 0) {
         slideWidth = carouselSlides[0].getBoundingClientRect().width;
-        carouselTrack.style.transform = `translateX(-${(currentIndex + 1) * slideWidth}px)`;
+        // Adjust initial position to show the first real slide (after the cloned last one)
+        carouselTrack.style.transform = `translateX(-${slideWidth}px)`;
     }
 }
 
 function cloneSlides() {
+    // Only clone if they haven't been cloned already and we have slides
     if (carouselTrack && carouselSlides.length > 0 && carouselTrack.children.length === carouselSlides.length) { 
         const firstSlide = carouselSlides[0].cloneNode(true);
         const lastSlide = carouselSlides[carouselSlides.length - 1].cloneNode(true);
@@ -210,11 +212,14 @@ function cloneSlides() {
         carouselTrack.appendChild(firstSlide);
         carouselTrack.insertBefore(lastSlide, carouselSlides[0]);
         
+        // Re-get all slides including clones
         carouselSlides = Array.from(document.querySelectorAll('.carousel-slide'));
 
+        // Reset transition to instantly jump to the correct starting position
         carouselTrack.style.transition = 'none';
         carouselTrack.style.transform = `translateX(-${slideWidth}px)`;
         
+        // Re-enable transition after a small delay
         setTimeout(() => {
             carouselTrack.style.transition = 'transform 0.5s ease-in-out';
         }, 50);
@@ -223,6 +228,7 @@ function cloneSlides() {
 
 function moveToSlide(targetIndex) {
     if (carouselTrack) {
+        // The +1 accounts for the cloned last slide at the beginning
         carouselTrack.style.transform = `translateX(-${(targetIndex + 1) * slideWidth}px)`;
         updateDots(targetIndex);
         currentIndex = targetIndex;
@@ -239,41 +245,45 @@ function updateDots(targetIndex) {
 }
 
 function createDots() {
-    if (dotsContainer && carouselSlides.length > 2) {
+    // Create dots only for the original slides, not the clones
+    if (dotsContainer && carouselSlides.length > 2) { // More than 2 because of the 2 cloned slides
         dotsContainer.innerHTML = '';
+        // Loop through original slides (total slides - 2 cloned)
         for (let i = 0; i < carouselSlides.length - 2; i++) {
             const dot = document.createElement('span');
             dot.classList.add('dot');
             dot.dataset.index = i;
             dot.addEventListener('click', () => {
                 moveToSlide(i);
-                stopAutoSlide();
+                stopAutoSlide(); // Stop and restart on manual dot click
                 startAutoSlide();
             });
             dotsContainer.appendChild(dot);
         }
-        updateDots(currentIndex);
+        updateDots(currentIndex); // Set initial active dot
     }
 }
 
 function slideNext() {
     let newIndex = currentIndex + 1;
+    // Check if we are at the last real slide
     if (newIndex >= carouselSlides.length - 2) {
-        newIndex = 0;
+        newIndex = 0; // Wrap around to the first real slide
     }
     moveToSlide(newIndex);
 }
 
 function slidePrev() {
     let newIndex = currentIndex - 1;
+    // Check if we are at the first real slide
     if (newIndex < 0) {
-        newIndex = carouselSlides.length - 3;
+        newIndex = carouselSlides.length - 3; // Wrap around to the last real slide (before cloned one)
     }
     moveToSlide(newIndex);
 }
 
 function startAutoSlide() {
-    stopAutoSlide();
+    stopAutoSlide(); // Clear any existing interval to prevent multiple intervals
     autoSlideInterval = setInterval(() => {
         slideNext();
     }, AUTO_SLIDE_DELAY); 
@@ -283,6 +293,23 @@ function stopAutoSlide() {
     clearInterval(autoSlideInterval);
 }
 
+// Event listeners for carousel navigation buttons
+if (nextButton) {
+    nextButton.addEventListener('click', () => {
+        slideNext();
+        stopAutoSlide(); // Stop auto-slide on manual navigation
+        startAutoSlide(); // Restart auto-slide after manual interaction
+    });
+}
+
+if (prevButton) {
+    prevButton.addEventListener('click', () => {
+        slidePrev();
+        stopAutoSlide(); // Stop auto-slide on manual navigation
+        startAutoSlide(); // Restart auto-slide after manual interaction
+    });
+}
+
 if (carouselTrack) {
     carouselTrack.addEventListener('transitionend', () => {
         const currentTransform = getComputedStyle(carouselTrack).transform;
@@ -290,18 +317,22 @@ if (carouselTrack) {
         const currentX = matrix.m41;
         const visibleClonedIndex = Math.round(Math.abs(currentX) / slideWidth);
 
-        if (visibleClonedIndex === carouselSlides.length - 1) {
+        // If we are on the cloned first slide (which is visually the original last slide)
+        if (visibleClonedIndex === carouselSlides.length - 1) { // Index of the cloned first slide (at the end)
             carouselTrack.style.transition = 'none';
-            carouselTrack.style.transform = `translateX(-${slideWidth}px)`;
+            carouselTrack.style.transform = `translateX(-${slideWidth}px)`; // Jump to the real first slide
             currentIndex = 0;
             updateDots(currentIndex);
-        } else if (visibleClonedIndex === 0) {
+        } 
+        // If we are on the cloned last slide (which is visually the original first slide)
+        else if (visibleClonedIndex === 0) { // Index of the cloned last slide (at the beginning)
             carouselTrack.style.transition = 'none';
-            carouselTrack.style.transform = `translateX(-${(carouselSlides.length - 2) * slideWidth}px)`;
-            currentIndex = carouselSlides.length - 3;
+            carouselTrack.style.transform = `translateX(-${(carouselSlides.length - 2) * slideWidth}px)`; // Jump to the real last slide
+            currentIndex = carouselSlides.length - 3; // Adjust to the last original slide's index
             updateDots(currentIndex);
         }
         
+        // Re-enable transition after a very small delay to allow the jump to render
         setTimeout(() => {
             carouselTrack.style.transition = 'transform 0.5s ease-in-out';
         }, 50);
@@ -309,6 +340,7 @@ if (carouselTrack) {
 }
 
 // --- New Gallery Carousel Logic ---
+// This assumes a separate gallery carousel with its own buttons/track
 let galleryCarouselTrack = document.querySelector('.gallery-carousel-track');
 let galleryCarouselSlides = galleryCarouselTrack ? Array.from(document.querySelectorAll('.gallery-carousel-slide')) : [];
 let galleryCurrentIndex = 0;
@@ -374,7 +406,12 @@ function setupEventDetailsPage() {
 
     // Rellenar el contenido de la página con los datos del evento
     document.title = `Detalles del Evento - ${selectedEvent.title}`;
-    document.getElementById('event-detail-title').textContent = `Detalles del Evento - ${selectedEvent.title}`;
+    // Si tienes un elemento con ID 'event-detail-title' para el título principal de la página de detalles
+    const pageTitleElement = document.getElementById('event-detail-title');
+    if (pageTitleElement) {
+        pageTitleElement.textContent = `Detalles del Evento - ${selectedEvent.title}`;
+    }
+    
     document.getElementById('event-banner-image').style.backgroundImage = `url(${selectedEvent.image})`;
     document.getElementById('event-detail-name').textContent = selectedEvent.title;
     document.getElementById('event-detail-date-time').textContent = selectedEvent.dateTime;
@@ -509,7 +546,8 @@ function setupEventDetailsPage() {
         
         // Actualizar enlace de Google Maps
         if (viewMapLink) {
-             viewMapLink.href = `http://maps.google.com/maps?q=${selectedEvent.mapCoords[0]},${selectedEvent.mapCoords[1]}`;
+            // Asegúrate de que esta URL sea correcta. Usualmente es https://www.google.com/maps/search/?api=1&query=LAT,LONG
+            viewMapLink.href = `https://www.google.com/maps/search/?api=1&query=${selectedEvent.mapCoords[0]},${selectedEvent.mapCoords[1]}`;
         }
     }
 }
@@ -529,9 +567,18 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
         const nav = document.querySelector('.nav');
         const authButtons = document.querySelector('.auth-buttons');
-        if (nav.classList.contains('mobile-nav-open')) {
+        // Only attempt to close if mobile menu is open
+        if (nav && nav.classList.contains('mobile-nav-open')) {
             nav.classList.remove('mobile-nav-open');
-            authButtons.classList.remove('mobile-nav-open');
+            if (authButtons) {
+                authButtons.classList.remove('mobile-nav-open');
+            }
+            // Update mobile menu button icon
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            if (mobileMenuBtn) {
+                mobileMenuBtn.innerHTML = '☰';
+                mobileMenuBtn.setAttribute('aria-label', 'Abrir menú móvil');
+            }
         }
     });
 });
@@ -567,7 +614,7 @@ function createMobileMenu() {
     const authButtons = document.querySelector('.auth-buttons');
     
     let mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    if (!mobileMenuBtn) {
+    if (!mobileMenuBtn && navWrapper) { // Only create if navWrapper exists and button doesn't
         mobileMenuBtn = document.createElement('button');
         mobileMenuBtn.className = 'mobile-menu-btn';
         mobileMenuBtn.innerHTML = '☰';
@@ -575,30 +622,36 @@ function createMobileMenu() {
         navWrapper.appendChild(mobileMenuBtn);
     }
     
-    mobileMenuBtn.addEventListener('click', () => {
-        nav.classList.toggle('mobile-nav-open');
-        authButtons.classList.toggle('mobile-nav-open');
-        if (nav.classList.contains('mobile-nav-open')) {
-            mobileMenuBtn.innerHTML = '✕';
-            mobileMenuBtn.setAttribute('aria-label', 'Cerrar menú móvil');
-        } else {
-            mobileMenuBtn.innerHTML = '☰';
-            mobileMenuBtn.setAttribute('aria-label', 'Abrir menú móvil');
-        }
-    });
+    if (mobileMenuBtn && nav && authButtons) { // Ensure all elements exist before adding listener
+        mobileMenuBtn.addEventListener('click', () => {
+            nav.classList.toggle('mobile-nav-open');
+            authButtons.classList.toggle('mobile-nav-open');
+            if (nav.classList.contains('mobile-nav-open')) {
+                mobileMenuBtn.innerHTML = '✕';
+                mobileMenuBtn.setAttribute('aria-label', 'Cerrar menú móvil');
+            } else {
+                mobileMenuBtn.innerHTML = '☰';
+                mobileMenuBtn.setAttribute('aria-label', 'Abrir menú móvil');
+            }
+        });
+    } else {
+        console.warn("Mobile menu elements not found (nav, auth-buttons, or mobile-menu-btn). Mobile menu functionality might not work.");
+    }
     
     function checkScreenSize() {
-        if (window.innerWidth <= 768) {
-            nav.classList.remove('mobile-nav-open');
-            authButtons.classList.remove('mobile-nav-open');
-        } else {
-            nav.classList.remove('mobile-nav-open');
-            authButtons.classList.remove('mobile-nav-open');
+        if (nav && authButtons && mobileMenuBtn) { // Ensure elements exist
+            if (window.innerWidth > 768) { // Desktop view
+                nav.classList.remove('mobile-nav-open');
+                authButtons.classList.remove('mobile-nav-open');
+                mobileMenuBtn.innerHTML = '☰'; // Reset icon in case it was '✕'
+                mobileMenuBtn.setAttribute('aria-label', 'Abrir menú móvil');
+            }
+            // For smaller screens, the toggle handles the state
         }
     }
     
     window.addEventListener('resize', checkScreenSize);
-    checkScreenSize();
+    checkScreenSize(); // Initial check on load
 }
 
 console.log(`
@@ -629,13 +682,18 @@ document.addEventListener('DOMContentLoaded', () => {
         // Logic for index.html
         if (carouselTrack && carouselSlides.length > 0) {
             setupCarousel();
-            cloneSlides();
+            cloneSlides(); // Call cloneSlides after setupCarousel to get initial width
             createDots();
-            updateDots(currentIndex);
+            updateDots(currentIndex); // Ensure the first dot is active on load
             startAutoSlide();
+        } else {
+             console.warn("Hero carousel elements not found. Hero carousel functionality will not work.");
         }
+
         if (galleryCarouselTrack && galleryCarouselSlides.length > 0) {
             setupGalleryCarousel();
+        } else {
+            console.warn("Gallery carousel elements not found. Gallery carousel functionality might not work.");
         }
     } else if (document.querySelector('.event-details-content')) {
         // Logic for event_details.html
@@ -644,18 +702,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     createMobileMenu();
     
+    // Add a slight delay for body class to ensure CSS transitions apply smoothly
     setTimeout(() => {
         document.body.classList.add('loaded');
     }, 100);
 });
 
 window.addEventListener('resize', () => {
-    if (document.querySelector('.hero-carousel-section')) {
-        setupCarousel();
+    // Recalculate slide width and adjust transform on resize for hero carousel
+    if (document.querySelector('.hero-carousel-section') && carouselTrack && carouselSlides.length > 0) {
+        slideWidth = carouselSlides[0].getBoundingClientRect().width;
+        carouselTrack.style.transition = 'none'; // Temporarily disable transition
+        carouselTrack.style.transform = `translateX(-${(currentIndex + 1) * slideWidth}px)`;
+        // Re-enable transition after a very small delay
+        setTimeout(() => {
+            carouselTrack.style.transition = 'transform 0.5s ease-in-out';
+        }, 50);
     }
-    if (document.querySelector('.gallery-carousel-container')) {
-        setupGalleryCarousel(); // Re-ajusta el tamaño del slide al redimensionar
+    // Recalculate slide width and adjust transform on resize for gallery carousel
+    if (document.querySelector('.gallery-carousel-container') && galleryCarouselTrack && galleryCarouselSlides.length > 0) {
+        setupGalleryCarousel(); // This already handles resize logic for gallery
     }
-    // For event_details map, it re-initializes on load of page,
-    // so no specific resize logic needed for the map here unless it's full screen.
 });

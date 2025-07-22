@@ -17,7 +17,7 @@
 }
 
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     line-height: 1.6;
     color: var(--color-off-white); /* Texto principal blanco hueso */
     background-color: var(--color-black); /* Fondo de la página negro */
@@ -120,7 +120,7 @@ body {
     font-size: 0.9rem;
 }
 
-/* Hero Section with Carousel */
+/* Hero Section with Carousel (se mantiene sin cambios según tu solicitud) */
 .hero-carousel-section {
     position: relative;
     width: 100%;
@@ -159,7 +159,8 @@ body {
 .carousel-slide img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover; /* SE MANTIENE 'cover' AQUÍ */
+    object-position: center;
     filter: brightness(80%); /* Un poco más oscuro para que el texto resalte si hubiera */
 }
 
@@ -233,7 +234,7 @@ body {
     color: var(--color-off-white); /* Títulos blanco hueso */
 }
 
-/* Band Upcoming Events Section */
+/* Band Upcoming Events Section - MODIFICADO */
 .band-upcoming-events {
     padding: 4rem 0;
     background: var(--color-black); /* Fondo negro */
@@ -290,8 +291,12 @@ body {
 .upcoming-event-card img {
     width: 100%;
     height: 180px;
-    object-fit: cover;
+    object-fit: contain; /* CAMBIO CLAVE AQUÍ: De 'cover' a 'contain' */
+    object-position: center;
     display: block;
+    background-color: var(--color-black); /* Fondo negro para el espacio vacío si la imagen no es de esa proporción */
+    padding: 10px; /* Opcional: añade un poco de padding si quieres que la imagen no llegue al borde de la tarjeta */
+    box-sizing: border-box; /* Para que el padding no afecte el tamaño total */
 }
 
 .upcoming-event-card .event-date {
@@ -316,7 +321,7 @@ body {
 }
 
 
-/* Featured Events Section */
+/* Featured Events Section (se mantiene sin cambios según tu solicitud) */
 .featured-events {
     padding: 6rem 0;
     background: var(--color-black); /* Fondo negro */
@@ -349,7 +354,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-size: cover;
+    background-size: cover; /* SE MANTIENE 'cover' AQUÍ */
     background-position: center;
 }
 
@@ -516,7 +521,7 @@ body {
     color: var(--color-off-white); /* Texto blanco hueso */
 }
 
-/* Event Details Page Specific Styles */
+/* Event Details Page Specific Styles (se mantienen sin cambios según tu solicitud) */
 .event-detail-hero {
     width: 100%;
     height: 400px; /* Altura del banner */
@@ -528,7 +533,7 @@ body {
 .event-image-banner {
     width: 100%;
     height: 100%;
-    background-size: cover;
+    background-size: cover; /* SE MANTIENE 'cover' AQUÍ */
     background-position: center;
     filter: brightness(60%); /* Oscurece la imagen para que el texto resalte */
     position: absolute;
