@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de Imágenes</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos específicos para el editor */
+        body {
+            background-color: var(--color-black);
+            color: var(--color-off-white);
+        }
+        .editor-container {
+            max-width: 900px;
+            margin: 4rem auto;
+            padding: 30px;
+            background-color: var(--color-dark-gray);
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.08);
+        }
+        .editor-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--color-medium-gray);
+        }
+        .editor-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .editor-section h2 {
+            font-size: 2rem;
+            color: var(--color-pastel-purple);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .image-uploader {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .image-uploader label {
+            font-weight: 600;
+            color: var(--color-off-white);
+            display: block;
+            margin-bottom: 5px;
+        }
+        .image-uploader input[type="file"] {
+            padding: 10px;
+            background-color: var(--color-black);
+            color: var(--color-off-white);
+            border: 1px solid var(--color-medium-gray);
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .image-uploader button {
+            background-color: var(--color-pastel-purple);
+            color: var(--color-black);
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        .image-uploader button:hover {
+            background-color: #c288c2;
+        }
+        .preview-images {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center; /* Centrar las previsualizaciones */
+        }
+        .preview-item {
+            position: relative;
+            border: 1px solid var(--color-medium-gray);
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: var(--color-black);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            width: 150px; /* Tamaño fijo para las previsualizaciones */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        .preview-item img {
+            width: 100%;
+            height: 100px; /* Altura fija para previsualización */
+            object-fit: contain; /* Mostrar imagen completa */
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .preview-item button.remove-btn {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background-color 0.3s ease;
+        }
+        .preview-item button.remove-btn:hover {
+            background-color: #cc0000;
+        }
+        .preview-item input[type="file"] {
+            width: calc(100% - 20px);
+            margin-top: 10px;
+        }
+        .card-image-control {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .card-image-item {
+            background-color: var(--color-black);
+            border: 1px solid var(--color-medium-gray);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        .card-image-item h3 {
+            font-size: 1.1rem;
+            color: var(--color-pastel-purple);
+            text-align: center;
+        }
+        .card-image-item img {
+            width: 100%;
+            max-height: 120px;
+            object-fit: contain;
+            border-radius: 5px;
+        }
+        .card-image-item input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* Mensajes de feedback */
+        .feedback-message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: 600;
+            display: none; /* Oculto por defecto */
+        }
+        .feedback-message.success {
+            background-color: #28a745;
+            color: white;
+        }
+        .feedback-message.error {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .editor-container {
+                margin: 2rem auto;
+                padding: 20px;
+            }
+            .editor-section h2 {
+                font-size: 1.8rem;
+            }
+            .card-image-control {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+            .preview-images {
+                flex-direction: column;
+                align-items: center;
+            }
+            .preview-item {
+                width: 90%; /* Más ancho en móvil */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <img src="img/minilogo.png" alt="Logo de la Banda" class="joinnus-header-logo">
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">Inicio</a>
+                    <a href="index.html#proximos-conciertos" class="nav-link">Conciertos</a>
+                    <a href="#" class="nav-link">Nosotros</a>
+                    <a href="#" class="nav-link">Contacto</a>
+                </nav>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline">Iniciar sesión</button>
+                    <button class="btn btn-primary">Registrarse</button>
+                </div>
+                <button class="mobile-menu-btn" aria-label="Abrir menú móvil">☰</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="editor-container">
+        <div class="editor-section">
+            <h2>Imágenes del Carrusel Principal</h2>
+            <p>Puedes añadir o eliminar las imágenes que aparecen en el carrusel de la página de inicio. El carrusel se adaptará automáticamente. Para actualizar una imagen específica, elimínala y vuelve a añadir la nueva.</p>
+            <div class="image-uploader">
+                <label for="carousel-image-input">Subir nueva imagen para el carrusel:</label>
+                <input type="file" id="carousel-image-input" accept="image/*">
+                <button id="add-carousel-image">Añadir al Carrusel</button>
+            </div>
+            <div id="carousel-previews" class="preview-images">
+                </div>
+            <div id="carousel-feedback" class="feedback-message"></div>
+        </div>
+
+        <div class="editor-section">
+            <h2>Imágenes de Próximos Conciertos</h2>
+            <p>Cambia las imágenes de las tarjetas de los próximos conciertos (Ej. Lima, Cusco, Arequipa). Selecciona una nueva imagen y haz clic en "Actualizar Imagen".</p>
+            <div id="upcoming-events-controls" class="card-image-control">
+                </div>
+            <div id="upcoming-events-feedback" class="feedback-message"></div>
+        </div>
+
+        <div class="editor-section">
+            <h2>Imágenes de Eventos Destacados</h2>
+            <p>Cambia las imágenes de fondo de las tarjetas de eventos destacados (Ej. Festival de Verano, Noche de Jazz). Selecciona una nueva imagen y haz clic en "Actualizar Imagen".</p>
+            <div id="featured-events-controls" class="card-image-control">
+                </div>
+            <div id="featured-events-feedback" class="feedback-message"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Joinnus</h3>
+                    <p>Conectando personas a través de eventos y experiencias increíbles en todo el mundo.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Para Asistentes</h4>
+                    <ul>
+                        <li><a href="#">Explorar Eventos</a></li>
+                        <li><a href="#">Mis Entradas</a></li>
+                        <li><a href="#">Centro de Ayuda</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Para Organizadores</h4>
+                    <ul>
+                        <li><a href="#">Crear Evento</a></li>
+                        <li><a href="#">Precios</a></li>
+                        <li><a href="#">Recursos</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Compañía</h4>
+                    <ul>
+                        <li><a href="#">Acerca de Nosotros</a></li>
+                        <li><a href="#">Empleo</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2024 Joinnus. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script> 
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const carouselImageInput = document.getElementById('carousel-image-input');
+            const addCarouselImageBtn = document.getElementById('add-carousel-image');
+            const carouselPreviews = document.getElementById('carousel-previews');
+            const carouselFeedback = document.getElementById('carousel-feedback');
+            const upcomingEventsControls = document.getElementById('upcoming-events-controls');
+            const upcomingEventsFeedback = document.getElementById('upcoming-events-feedback');
+            const featuredEventsControls = document.getElementById('featured-events-controls');
+            const featuredEventsFeedback = document.getElementById('featured-events-feedback');
+
+            // --- Funciones de Utilidad ---
+            function showFeedback(element, message, type) {
+                element.textContent = message;
+                element.className = `feedback-message ${type}`;
+                element.style.display = 'block';
+                setTimeout(() => {
+                    element.style.display = 'none';
+                    element.textContent = '';
+                }, 3000);
+            }
+
+            function getBase64(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = error => reject(error);
+                });
+            }
+
+            // --- Lógica de Inicialización de Carrusel (para que el editor siempre tenga imágenes si no hay) ---
+            function initializeCarouselDefaultsInEditor() {
+                let carouselImages = JSON.parse(localStorage.getItem('carouselImages'));
+                if (!carouselImages || carouselImages.length === 0) {
+                    // Si localStorage está vacío para las imágenes del carrusel, establece las predeterminadas (como rutas)
+                    const defaultPaths = [
+                        'images/carousel-1.jpg',
+                        'images/carousel-2.jpg',
+                        'images/carousel-3.jpg'
+                    ];
+                    localStorage.setItem('carouselImages', JSON.stringify(defaultPaths));
+                    console.log("Editor: Initialized default carousel images in localStorage.");
+                }
+            }
+
+            // --- Lógica del Carrusel ---
+            async function addCarouselImage() {
+                const file = carouselImageInput.files?.[0]; // Usa optional chaining para seguridad
+                if (!file) {
+                    showFeedback(carouselFeedback, 'Por favor, selecciona una imagen para el carrusel.', 'error');
+                    return;
+                }
+                if (!file.type.startsWith('image/')) {
+                    showFeedback(carouselFeedback, 'El archivo seleccionado no es una imagen válida.', 'error');
+                    return;
+                }
+
+                try {
+                    const base64Image = await getBase64(file);
+                    let carouselImages = JSON.parse(localStorage.getItem('carouselImages')) || [];
+                    carouselImages.push(base64Image);
+                    localStorage.setItem('carouselImages', JSON.stringify(carouselImages));
+                    renderCarouselPreviews(); // Vuelve a renderizar las previsualizaciones
+                    carouselImageInput.value = ''; // Limpiar input file
+                    showFeedback(carouselFeedback, 'Imagen añadida al carrusel con éxito.', 'success');
+                } catch (error) {
+                    console.error('Error al añadir imagen al carrusel:', error);
+                    showFeedback(carouselFeedback, 'Error al procesar la imagen.', 'error');
+                }
+            }
+
+            function removeCarouselImage(index) {
+                let carouselImages = JSON.parse(localStorage.getItem('carouselImages')) || [];
+                if (index > -1 && index < carouselImages.length) {
+                    carouselImages.splice(index, 1); // Elimina la imagen en el índice dado
+                    localStorage.setItem('carouselImages', JSON.stringify(carouselImages));
+                    renderCarouselPreviews(); // Vuelve a renderizar las previsualizaciones
+                    showFeedback(carouselFeedback, 'Imagen eliminada del carrusel.', 'success');
+                }
+            }
+
+            function renderCarouselPreviews() {
+                carouselPreviews.innerHTML = ''; // Limpiar previsualizaciones existentes
+                const carouselImages = JSON.parse(localStorage.getItem('carouselImages')) || [];
+
+                if (carouselImages.length === 0) { // Esto solo debería ocurrir si el localStorage fue borrado después de la inicialización
+                    carouselPreviews.innerHTML = '<p style="color: var(--color-off-white); text-align: center; width: 100%;">No hay imágenes en el carrusel. Añade algunas para empezar.</p>';
+                    return;
+                }
+
+                carouselImages.forEach((src, index) => {
+                    const previewItem = document.createElement('div');
+                    previewItem.className = 'preview-item';
+                    // El atributo src de <img> puede manejar tanto rutas de archivo como strings Base64
+                    previewItem.innerHTML = `
+                        <img src="${src}" alt="Carousel Preview ${index + 1}">
+                        <button class="remove-btn" data-index="${index}">Eliminar</button>
+                    `;
+                    carouselPreviews.appendChild(previewItem);
+                });
+
+                // Añadir event listeners a los botones de eliminar
+                carouselPreviews.querySelectorAll('.remove-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const index = parseInt(e.target.dataset.index);
+                        removeCarouselImage(index);
+                    });
+                });
+            }
+
+            addCarouselImageBtn.addEventListener('click', addCarouselImage);
+
+            // --- Lógica de Tarjetas de Eventos (Próximos Conciertos y Destacados) ---
+            const eventCardsData = [
+                { id: 'band-event-1', title: 'Concierto Banda Lima', section: 'upcoming' },
+                { id: 'band-event-2', title: 'Concierto Banda Cusco', section: 'upcoming' },
+                { id: 'band-event-3', title: 'Concierto Banda Arequipa', section: 'upcoming' },
+                { id: 'band-event-4', title: 'Concierto Banda Trujillo', section: 'upcoming' },
+                { id: 'band-event-5', title: 'Concierto Banda Chiclayo', section: 'upcoming' },
+                { id: 'featured-event-1', title: 'Festival de Verano Rock', section: 'featured' },
+                { id: 'featured-event-2', title: 'Conferencia de Innovación Musical', section: 'featured' },
+                { id: 'featured-event-3', title: 'Noche de Jazz & Blues', section: 'featured' },
+                { id: 'featured-event-4', title: 'Batalla de Bandas Emergentes', section: 'featured' },
+            ];
+
+            function getEventImage(eventId, defaultPath) {
+                return localStorage.getItem(`eventImage_${eventId}`) || defaultPath;
+            }
+
+            async function updateEventImage(eventId, file, feedbackElement) {
+                if (!file) {
+                    showFeedback(feedbackElement, `Por favor, selecciona una imagen para ${eventId}.`, 'error');
+                    return;
+                }
+                if (!file.type.startsWith('image/')) {
+                    showFeedback(feedbackElement, 'El archivo seleccionado no es una imagen válida.', 'error');
+                    return;
+                }
+
+                try {
+                    const base64Image = await getBase64(file);
+                    localStorage.setItem(`eventImage_${eventId}`, base64Image);
+                    showFeedback(feedbackElement, `Imagen de ${eventId} actualizada con éxito.`, 'success');
+                    renderEventCardControls(); // Volver a renderizar para actualizar la vista con la nueva imagen
+                } catch (error) {
+                    console.error(`Error al actualizar imagen para ${eventId}:`, error);
+                    showFeedback(feedbackElement, `Error al procesar la imagen para ${eventId}.`, 'error');
+                }
+            }
+
+            function renderEventCardControls() {
+                upcomingEventsControls.innerHTML = '';
+                featuredEventsControls.innerHTML = '';
+
+                eventCardsData.forEach(event => {
+                    let defaultImagePath;
+                    if (event.section === 'upcoming') {
+                        defaultImagePath = `images/${event.id}.jpg`;
+                    } else if (event.section === 'featured') {
+                        defaultImagePath = `images/${event.id}.jpg`;
+                    }
+                    
+                    const currentImageSrc = getEventImage(event.id, defaultImagePath);
+                    const cardItem = document.createElement('div');
+                    cardItem.className = 'card-image-item';
+                    cardItem.innerHTML = `
+                        <h3>${event.title}</h3>
+                        <img src="${currentImageSrc}" alt="${event.title} Image">
+                        <input type="file" id="input-${event.id}" accept="image/*">
+                        <button class="btn btn-primary btn-sm update-btn" data-event-id="${event.id}">Actualizar Imagen</button>
+                    `;
+
+                    if (event.section === 'upcoming') {
+                        upcomingEventsControls.appendChild(cardItem);
+                    } else if (event.section === 'featured') {
+                        featuredEventsControls.appendChild(cardItem);
+                    }
+                });
+
+                document.querySelectorAll('.update-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const eventId = e.target.dataset.eventId;
+                        const fileInput = document.getElementById(`input-${eventId}`);
+                        const file = fileInput.files?.[0]; // Usa optional chaining
+                        const feedbackElement = eventId.startsWith('band-event') ? upcomingEventsFeedback : featuredEventsFeedback;
+                        updateEventImage(eventId, file, feedbackElement);
+                    });
+                });
+            }
+
+
+            // --- Inicializar el editor al cargar la página ---
+            initializeCarouselDefaultsInEditor(); // Llama a esta función para asegurar que haya imágenes en localStorage
+            renderCarouselPreviews(); // Esto cargará las imágenes del carrusel desde localStorage
+            renderEventCardControls();
+        });
+    </script>
+</body>
+</html>
