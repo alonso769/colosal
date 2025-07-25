@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar - Colosal</title>
+    <link rel="shortcut icon" href="img/minilogo.png" type="image/x-icon">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <link rel="stylesheet" href="styles_ingresar.css">
+</head>
+<body>
+    <audio id="backgroundMusic" autoplay loop muted> 
+        <source src="musica/cancion1.mpeg" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+
+    <div class="carousel-container">
+        <div class="carousel-slide">
+            <img src="images/foto1.jpeg" alt="Imagen de fondo 1">
+            <img src="images/foto2.jpeg" alt="Imagen de fondo 2">
+            <img src="images/foto3.jpeg" alt="Imagen de fondo 3">
+            <img src="images/foto4.jpeg" alt="Imagen de fondo 4">
+        </div>
+    </div>
+
+    <div class="container">
+        <img src="img/minilogo.png" alt="Ralph's Sanguichería Logo" class="logo">
+        
+        <button id="toggleMuteButton-bottom">
+            <i class="fas fa-volume-up"></i> 
+        </button>
+
+        <h2>Registrar Cuenta</h2>
+        <form id="loginForm">
+            <div class="input-group">
+                <label for="username">Correo Electrónico:</label>
+                <input type="email" id="username" placeholder="Ingresa tu correo">
+                <p id="userError" class="error-message">El correo electrónico es obligatorio</p>
+                <p id="userNotFound" class="error-message">Usuario no encontrado</p>
+            </div>
+            <div class="input-group">
+                <label for="password">Contraseña:</label>
+                <div class="password-input-container">
+                    <input type="password" id="password" placeholder="Ingresa tu contraseña">
+                    <i id="togglePassword" class="fas fa-eye toggle-password"></i>
+                </div>
+                <p id="passError" class="error-message">La contraseña es obligatoria</p>
+                <p id="passIncorrect" class="error-message">Contraseña incorrecta</p>
+            </div>
+           
+            <button type="submit">Guardar</button>
+        </form>
+        <div class="options">
+      
+        </div>
+        <a href="ingresar.html" class="register-link">¿Ya tienes una cuenta? Ingresa</a>
+                <a href="menu.html" class="register-link">Aun no quiero registrarme ,pero soy emo de cora</a>
+
+        <div id="resetPasswordContainer" style="display: none; margin-top: 20px;">
+            <h3>Restablecer Contraseña</h3>
+            <div class="input-group">
+                <label for="resetPasswordEmail">Correo Electrónico:</label>
+                <input type="email" id="resetPasswordEmail" placeholder="Ingresa tu correo para restablecer">
+                <p id="resetPasswordError" class="error-message" style="display: none;"></p>
+                <p id="resetPasswordMessage" class="error-message" style="display: none; color: green;"></p>
+            </div>
+            <button id="sendResetPassword">Enviar Correo de Restablecimiento</button>
+            <button id="backToLogin" style="margin-top: 10px;">Volver al Inicio de Sesión</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+
+        // Tu configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfJ0fZ30u3RIWjWBRMCMepSoC9P881K3E",
+            authDomain: "ralph-s-sangucheria.firebaseapp.com",
+            projectId: "ralph-s-sangucheria",
+            storageBucket: "ralph-s-sangucheria.firebasestorage.app",
+            messagingSenderId: "795336985600",
+            appId: "1:795336985600:web:66eef18a4eaba9a9bc5ce5",
+            measurementId: "G-TFW57TXCPR"
+        };
+
+        // Inicializa Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById("loginForm");
+            const usernameInput = document.getElementById("username");
+            const passwordInput = document.getElementById("password");
+            const userNotFound = document.getElementById("userNotFound");
+            const passIncorrect = document.getElementById("passIncorrect");
+            const togglePassword = document.getElementById("togglePassword");
+            const forgotPasswordLink = document.querySelector(".forgot-password-link"); 
+            const resetPasswordContainer = document.getElementById("resetPasswordContainer");
+            const resetPasswordEmailInput = document.getElementById("resetPasswordEmail");
+            const sendResetPasswordButton = document.getElementById("sendResetPassword");
+            const resetPasswordMessage = document.getElementById("resetPasswordMessage");
+            const resetPasswordError = document.getElementById("resetPasswordError");
+            const backToLoginButton = document.getElementById("backToLogin");
+            
+            // Obtener el elemento de audio y el botón de silenciar
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            const toggleMuteButtonBottom = document.getElementById('toggleMuteButton-bottom'); 
+
+            // Función para actualizar la apariencia del botón de silenciar
+            function updateMuteButton() {
+                if (toggleMuteButtonBottom) { 
+                    if (backgroundMusic.muted) {
+                        toggleMuteButtonBottom.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                        toggleMuteButtonBottom.title = 'Activar Sonido'; 
+                    } else {
+                        toggleMuteButtonBottom.innerHTML = '<i class="fas fa-volume-up"></i>';
+                        toggleMuteButtonBottom.title = 'Desactivar Sonido'; 
+                    }
+                }
+            }
+
+            // Llamada inicial para establecer la apariencia del botón
+            updateMuteButton(); 
+
+            // Manejar el clic del botón
+            if (toggleMuteButtonBottom) {
+                toggleMuteButtonBottom.addEventListener('click', function() {
+                    backgroundMusic.muted = !backgroundMusic.muted; 
+                    updateMuteButton(); 
+                    if (!backgroundMusic.muted) {
+                        backgroundMusic.play().catch(e => {
+                            console.log("Play on unmute prevented:", e);
+                        });
+                    }
+                });
+            }
+
+            loginForm.addEventListener("submit", async (event) => {
+                event.preventDefault();
+
+                const email = usernameInput.value.trim();
+                const password = passwordInput.value.trim();
+
+                userNotFound.style.display = "none";
+                passIncorrect.style.display = "none";
+
+                if (email === "") {
+                    document.getElementById("userError").style.display = "block";
+                    return;
+                } else {
+                    document.getElementById("userError").style.display = "none";
+                }
+
+                if (password === "") {
+                    document.getElementById("passError").style.display = "block";
+                    return;
+                } else {
+                    document.getElementById("passError").style.display = "none";
+                }
+
+                try {
+                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                    const firebaseUser = userCredential.user;
+                    console.log("Usuario autenticado:", firebaseUser);
+                    window.location.href = "inicio.html";
+                } catch (error) {
+                    console.error("Error al iniciar sesión:", error);
+                    if (error.code === 'auth/user-not-found') {
+                        userNotFound.style.display = "block";
+                    } else if (error.code === 'auth/wrong-password') {
+                        passIncorrect.style.display = "block";
+                    } else {
+                        console.error("Ocurrió un error al iniciar sesión: " + error.message);
+                    }
+                }
+            });
+
+            if (togglePassword) {
+                togglePassword.addEventListener('click', function() {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    this.classList.toggle('fa-eye');
+                    this.classList.toggle('fa-eye-slash');
+                });
+            }
+
+            forgotPasswordLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                loginForm.style.display = "none";
+                resetPasswordContainer.style.display = "block";
+                resetPasswordMessage.style.display = "none";
+                resetPasswordError.style.display = "none";
+            });
+
+            sendResetPasswordButton.addEventListener('click', async function() {
+                const email = resetPasswordEmailInput.value.trim();
+
+                if (email === "") {
+                    resetPasswordError.textContent = "Por favor, ingresa tu correo electrónico.";
+                    resetPasswordError.style.display = "block";
+                    return;
+                }
+
+                try {
+                    await sendPasswordResetEmail(auth, email);
+                    resetPasswordMessage.textContent = "Se ha enviado un correo electrónico para restablecer tu contraseña. Revisa tu bandeja de entrada (y la carpeta de spam).";
+                    resetPasswordMessage.style.display = "block";
+                    resetPasswordError.style.display = "none";
+                } catch (error) {
+                    console.error("Error al enviar correo de restablecimiento:", error);
+                    resetPasswordError.textContent = "Ocurrió un error al enviar el correo electrónico: " + error.message;
+                    resetPasswordError.style.display = "block";
+                    resetPasswordMessage.style.display = "none";
+                }
+            });
+
+            if (backToLoginButton) {
+                backToLoginButton.addEventListener('click', function() {
+                    resetPasswordContainer.style.display = "none";
+                    loginForm.style.display = "block";
+                    resetPasswordEmailInput.value = ""; 
+                    resetPasswordMessage.style.display = "none"; 
+                    resetPasswordError.style.display = "none"; 
+                });
+            }
+        });
+    </script>
+    <script src="script_ingresar.js"></script> 
+</body>
+</html>
