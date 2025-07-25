@@ -112,12 +112,35 @@
 const backgroundMusic = document.getElementById('backgroundMusic');
 const toggleMuteButtonBottom = document.getElementById('toggleMuteButton-bottom');
 
-// Intentar forzar reproducción automática
-backgroundMusic.play().then(() => {
-    console.log("Reproducción automática iniciada.");
-}).catch((e) => {
-    console.warn("El navegador bloqueó la reproducción automática:", e);
-});
+// Intentar forzar reproducción automática con sonido
+function iniciarMusica() {
+    backgroundMusic.muted = false;
+    backgroundMusic.volume = 1;
+
+    backgroundMusic.play().then(() => {
+        console.log("🎵 Música reproduciéndose automáticamente.");
+    }).catch((e) => {
+        console.warn("🚫 El navegador bloqueó la reproducción automática:", e);
+
+        // Esperar una interacción del usuario para intentar de nuevo
+        const reintentarReproduccion = () => {
+            backgroundMusic.play().then(() => {
+                console.log("🎵 Reproducción iniciada después de interacción.");
+                document.removeEventListener("click", reintentarReproduccion);
+                document.removeEventListener("keydown", reintentarReproduccion);
+            }).catch(err => {
+                console.warn("⚠️ Aún no se puede reproducir:", err);
+            });
+        };
+
+        // Escuchar interacción del usuario
+        document.addEventListener("click", reintentarReproduccion);
+        document.addEventListener("keydown", reintentarReproduccion);
+    });
+}
+
+iniciarMusica();
+
 
 
             // Función para actualizar la apariencia del botón de silenciar

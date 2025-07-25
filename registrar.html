@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="styles_ingresar.css">
 </head>
 <body>
-    <audio id="backgroundMusic" autoplay loop muted> 
+     <audio id="backgroundMusic" autoplay loop> 
         <source src="musica/cancion1.mpeg" type="audio/mpeg">
         Tu navegador no soporta el elemento de audio.
     </audio>
@@ -105,9 +105,16 @@
             const resetPasswordError = document.getElementById("resetPasswordError");
             const backToLoginButton = document.getElementById("backToLogin");
             
-            // Obtener el elemento de audio y el botón de silenciar
-            const backgroundMusic = document.getElementById('backgroundMusic');
-            const toggleMuteButtonBottom = document.getElementById('toggleMuteButton-bottom'); 
+           // Obtener el elemento de audio y el botón de silenciar
+const backgroundMusic = document.getElementById('backgroundMusic');
+const toggleMuteButtonBottom = document.getElementById('toggleMuteButton-bottom');
+
+// Intentar forzar reproducción automática
+backgroundMusic.play().then(() => {
+    console.log("Reproducción automática iniciada.");
+}).catch((e) => {
+    console.warn("El navegador bloqueó la reproducción automática:", e);
+});
 
             // Función para actualizar la apariencia del botón de silenciar
             function updateMuteButton() {
