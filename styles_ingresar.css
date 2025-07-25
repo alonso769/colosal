@@ -71,45 +71,51 @@ body {
     border-radius: 15px;
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* Sombra más fuerte para profundidad */
     border: 1px solid rgba(255, 255, 255, 0.18); /* Borde sutil */
-    padding: 2.5rem;
+    padding: 2rem; /* Mantengo un padding decente para no apelmazar demasiado */
     width: 380px; /* Ancho predeterminado para pantallas más grandes */
     max-width: 90%; /* Asegura que no se desborde en pantallas un poco más pequeñas */
     text-align: center;
     color: #000; /* Texto negro para el texto general del contenedor */
     z-index: 1; /* Asegura que el formulario esté encima del carrusel */
     box-sizing: border-box;
-    position: relative; /* Necesario para posicionar elementos con `position: absolute` dentro */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra los elementos horizontalmente */
+    gap: 0.8rem; /* Reducido para que todo esté más junto */
 }
 
 .logo {
-    width: 200px; 
-    margin-bottom: 30px;
+    width: 200px;
+    margin-bottom: 15px; /* Ajuste para que esté más cerca del título */
 }
 
 h2 {
     font-size: 28px;
     font-weight: 600;
-    margin-bottom: 25px;
+    margin-bottom: 15px; /* Ajuste para que esté más cerca del primer input */
     color: #000; /* Negro para el título */
 }
 
 .input-group {
-    margin-bottom: 20px;
+    margin-bottom: 10px; /* Ajustado el margen inferior */
     text-align: left;
     position: relative;
+    width: 100%; /* Asegura que el input-group ocupe todo el ancho */
 }
 
 label {
     font-size: 15px;
     font-weight: 400;
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 5px; /* Pequeño margen entre label y input */
     color: #000; /* Negro para las etiquetas */
 }
 
+/* Las barras de ingreso ocupan todo el ancho del cuadro transparente */
 input {
-    width: calc(100% - 40px); /* Considera el padding + espacio del icono */
-    padding: 12px 10px;
+    width: 100%;
+    padding: 10px; /* Padding para mantener un buen tamaño visual */
     border: 1px solid rgba(0, 0, 0, 0.3); /* Borde más oscuro para los inputs */
     border-radius: 8px;
     font-size: 16px;
@@ -123,35 +129,46 @@ input::placeholder {
     color: rgba(0, 0, 0, 0.7); /* Texto de marcador de posición más oscuro */
 }
 
+/* Contenedor para la barra de contraseña y el ojo */
 .password-input-container {
-    position: relative;
+    position: relative; /* Esencial para posicionar el ojo absoluto dentro */
     width: 100%;
+    display: flex; /* Mantenemos flex para alinear si se desea */
+    align-items: center; /* Centra verticalmente el input y el ojo */
 }
 
+/* El ojo está a la izquierda pero en ese mismo lugar */
 .toggle-password {
     position: absolute;
-    right: 12px; /* Distancia desde el borde derecho del contenedor del input */
+    left: 10px; /* Lo mueve a la izquierda del input */
     top: 50%;
-    transform: translateY(-50%); /* Centra verticalmente el icono */
+    transform: translateY(-50%); /* Lo centra verticalmente dentro del input */
     cursor: pointer;
     color: #000; /* Color negro para el icono del ojo */
     font-size: 18px;
+    z-index: 2; /* Asegura que esté por encima del input */
+}
+
+/* Ajuste para el input de la contraseña para dejar espacio al icono */
+.password-input-container input#password { /* Selector más específico */
+    padding-left: 40px; /* Deja espacio para el icono del ojo */
+    padding-right: 10px; /* Mantiene un poco de padding a la derecha */
+    width: 100%; /* Asegura que ocupe todo el ancho disponible */
 }
 
 /* Estilos generales para los botones de acción del formulario */
-/* Este selector (button:not([id^="toggleMuteButton"])) asegura que solo afecte a los botones del formulario */
-button:not([id^="toggleMuteButton"]) { 
+button:not([id^="toggleMuteButton"]) {
     width: 100%;
     background: #dda0dd; /* Morado pastel */
     color: #fff; /* Texto blanco para el botón */
     border: none;
-    padding: 12px 0;
+    padding: 10px 0;
     font-size: 18px;
     font-weight: 600;
     border-radius: 8px;
     cursor: pointer;
     transition: background 0.3s ease, transform 0.2s ease;
-    margin-top: 15px;
+    margin-top: 10px; /* Ajuste del margen superior */
 }
 
 button:not([id^="toggleMuteButton"]):hover {
@@ -163,7 +180,7 @@ button:not([id^="toggleMuteButton"]):hover {
     display: flex;
     justify-content: center; /* Centra el enlace "olvidaste contraseña" */
     font-size: 14px;
-    margin-top: 20px;
+    margin-top: 10px; /* Ajuste del margen superior */
 }
 
 a {
@@ -181,12 +198,12 @@ a:hover {
     color: #cc0000; /* Rojo para los mensajes de error para visibilidad */
     font-size: 13px;
     display: none;
-    margin-top: 5px;
+    margin-top: 3px;
 }
 
 .register-link {
     display: block;
-    margin-top: 25px;
+    margin-top: 15px; /* Mantener un poco más de espacio para este enlace */
     font-size: 15px;
     color: #000; /* Negro para el enlace de registro */
     text-decoration: none;
@@ -200,11 +217,13 @@ a:hover {
 .remember-me {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    margin-bottom: 20px;
+    justify-content: flex-start; /* Vuelvo a la izquierda, es más común para checkboxes */
+    margin-bottom: 10px; /* Ajustado el margen inferior */
+    width: 100%; /* Asegura que ocupe el ancho completo para alinear a la izquierda */
 }
 
-.remember-me input[type="checkbox"] { /* Dirige específicamente al checkbox */
+/* CORREGIDO: Sintaxis para input[type="checkbox"] */
+.remember-me input[type="checkbox"] {
     accent-color: #dda0dd; /* Usa morado pastel para el checkbox */
     margin-right: 10px;
     cursor: pointer;
@@ -222,16 +241,29 @@ a:hover {
 
 /* Estilos para el contenedor de restablecimiento de contraseña */
 #resetPasswordContainer {
-    padding-top: 20px;
+    padding-top: 15px;
     border-top: 1px solid rgba(0, 0, 0, 0.1); /* Separador más oscuro */
+    margin-top: 10px; /* Ajuste del margen superior */
+    gap: 0.8rem; /* Para que los elementos internos estén más juntos */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #resetPasswordContainer h3 {
     color: #000; /* Negro para el título */
-    margin-bottom: 20px;
+    margin-bottom: 10px; /* Ajuste del margen inferior */
 }
 
 /* Estilos específicos para los botones de restablecimiento de contraseña */
+#resetPasswordContainer #sendResetPassword,
+#resetPasswordContainer #backToLogin { /* Agrupo ambos botones de restablecimiento */
+    width: 100%; /* Asegura que ocupen todo el ancho */
+    padding: 8px 0;
+    font-size: 16px;
+    margin-top: 5px; /* Pequeño margen entre ellos */
+}
+
 #resetPasswordContainer #sendResetPassword {
     background: #4CAF50; /* Verde para el botón de enviar */
     color: #fff; /* Texto blanco */
@@ -252,31 +284,31 @@ a:hover {
 
 /* Estilos para el botón circular de silenciar - Ahora en la esquina superior derecha del .container */
 #toggleMuteButton-bottom {
-    position: absolute; /* Para posicionarlo dentro del contenedor padre (.container) */
-    top: 20px; /* Distancia desde el borde superior del .container */
-    right: 20px; /* Distancia desde el borde derecho del .container */
-    z-index: 10; /* Asegura que esté por encima de otros elementos del formulario */
-    background-color: rgba(0, 0, 0, 0.5); /* Negro semi-transparente */
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.5);
     color: white;
-    border-radius: 50%; /* Lo hace circular */
-    width: 30px; /* Ancho fijo */
-    height: 30px; /* Alto fijo para un círculo perfecto */
-    display: flex; /* Usa flexbox para centrar el contenido */
-    justify-content: center; /* Centra horizontalmente */
-    align-items: center; /* Centra verticalmente */
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: none;
     cursor: pointer;
-    font-size: 0.8em; /* Tamaño del icono */
-    transition: background-color 0.3s ease; /* Efecto suave al pasar el ratón */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Sombra sutil para profundidad */
+    font-size: 0.7em;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 #toggleMuteButton-bottom:hover {
-    background-color: rgba(0, 0, 0, 0.7); /* Más oscuro al pasar el ratón */
+    background-color: rgba(0, 0, 0, 0.7);
 }
 
 #toggleMuteButton-bottom i {
-    font-size: 1em; /* Ajusta el tamaño del icono dentro del botón */
+    font-size: 1em;
 }
 
 
@@ -284,47 +316,54 @@ a:hover {
 
 @media (max-width: 768px) {
     .container {
-        padding: 2rem;
+        padding: 1.5rem;
         width: 90%;
         max-width: 320px;
+        gap: 0.6rem; /* Ajuste de gap para móviles */
     }
 
     .logo {
-        width: 150px; /* Ajuste del ancho del logo para móviles */
-        margin-bottom: 20px;
+        width: 150px;
+        margin-bottom: 10px;
     }
 
     h2 {
         font-size: 24px;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 
     label {
         font-size: 14px;
+        margin-bottom: 3px;
     }
 
     input {
-        padding: 10px;
+        padding: 8px;
         font-size: 15px;
     }
 
     .toggle-password {
         font-size: 16px;
+        left: 8px; /* Ajusta la posición izquierda en pantallas medianas */
+    }
+
+    .password-input-container input#password {
+        padding-left: 35px; /* Ajusta el padding para el icono en pantallas medianas */
     }
 
     button:not([id^="toggleMuteButton"]) {
-        padding: 10px 0;
+        padding: 8px 0;
         font-size: 16px;
-        margin-top: 10px;
+        margin-top: 8px;
     }
 
     .options, .register-link {
         font-size: 13px;
-        margin-top: 15px;
+        margin-top: 8px;
     }
 
     .remember-me {
-        margin-bottom: 15px;
+        margin-bottom: 8px;
     }
 
     .remember-me input[type="checkbox"] {
@@ -337,44 +376,79 @@ a:hover {
     }
 
     #toggleMuteButton-bottom {
-        top: 15px; /* Ajuste para pantallas medianas */
-        right: 15px; /* Ajuste para pantallas medianas */
-        width: 25px;
-        height: 25px;
-        font-size: 1.1em;
+        top: 10px;
+        right: 10px;
+        width: 20px;
+        height: 20px;
+        font-size: 1em;
     }
 }
 
 @media (max-width: 480px) {
     .container {
-        padding: 1.5rem;
+        padding: 1rem;
         max-width: 280px;
+        gap: 0.5rem; /* Ajuste de gap para pantallas pequeñas */
     }
 
     .logo {
-        width: 120px; /* Ajuste del ancho del logo para móviles muy pequeños */
-        margin-bottom: 15px;
+        width: 120px;
+        margin-bottom: 8px;
     }
 
     h2 {
         font-size: 22px;
+        margin-bottom: 8px;
+    }
+
+    label {
+        font-size: 13px;
+        margin-bottom: 2px;
     }
 
     input {
-        padding: 8px;
+        padding: 6px;
         font-size: 14px;
     }
 
-    button:not([id^="toggleMuteButton"]) {
-        padding: 8px 0;
+    .toggle-password {
         font-size: 15px;
+        left: 6px; /* Ajusta la posición izquierda en pantallas pequeñas */
+    }
+
+    .password-input-container input#password {
+        padding-left: 30px; /* Ajusta el padding para el icono en pantallas pequeñas */
+    }
+
+    button:not([id^="toggleMuteButton"]) {
+        padding: 6px 0;
+        font-size: 15px;
+        margin-top: 6px;
+    }
+
+    .options, .register-link {
+        font-size: 12px;
+        margin-top: 6px;
+    }
+
+    .remember-me {
+        margin-bottom: 6px;
+    }
+
+    .remember-me input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+    }
+
+    .remember-me label {
+        font-size: 13px;
     }
 
     #toggleMuteButton-bottom {
-        top: 10px; /* Ajuste para pantallas pequeñas */
-        right: 10px; /* Ajuste para pantallas pequeñas */
-        width: 20px;
-        height: 20px;
-        font-size: 1em;
+        top: 8px;
+        right: 8px;
+        width: 18px;
+        height: 18px;
+        font-size: 0.9em;
     }
 }
