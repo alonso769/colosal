@@ -13,7 +13,7 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box; /* IMPORTANT: Keep this for consistent sizing */
 }
 
 body {
@@ -1019,3 +1019,243 @@ input[type="number"]::-webkit-inner-spin-button {
 .mt-1 { margin-top: 1rem; }
 .mt-2 { margin-top: 2rem; }
 .mt-3 { margin-top: 3rem; }
+
+
+/* Login Form Specific Styles - ADDED/MODIFIED */
+
+/* This will be the semi-transparent background behind the login card if it's a modal */
+.login-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's on top */
+}
+
+.login-card {
+    background: var(--color-light-gray); /* Grey background for the card */
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(255, 255, 255, 0.15); /* More prominent white shadow */
+    width: 90%; /* Responsive width */
+    max-width: 400px; /* Max width for the card */
+    text-align: center;
+    position: relative; /* For positioning the close button if needed */
+    display: flex; /* Use flexbox for internal layout */
+    flex-direction: column; /* Stack items vertically */
+    gap: 1.5rem; /* Space between major sections */
+}
+
+.login-card .logo-container {
+    margin-bottom: 1rem;
+}
+
+.login-card .colosal-logo {
+    width: 150px; /* Adjust logo size as needed */
+    height: auto;
+    filter: brightness(0) invert(1); /* Makes a dark logo white, if necessary */
+    margin: 0 auto; /* Center the logo */
+    display: block; /* Ensure it's a block element for margin auto to work */
+}
+
+.login-card h2 {
+    font-size: 1.8rem;
+    color: var(--color-off-white); /* White text for heading */
+    margin-bottom: 1.5rem; /* Space below heading */
+}
+
+.form-group {
+    margin-bottom: 1rem; /* Space between form groups */
+    text-align: left; /* Align labels to the left */
+}
+
+.form-group label {
+    display: block; /* Make label take its own line */
+    font-size: 0.95rem;
+    color: var(--color-off-white); /* Label text white */
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+/* IMPORTANT: These rules ensure input fields have consistent sizing */
+.form-group .input-field,
+.login-card input[type="email"],
+.login-card input[type="password"] {
+    width: 100%; /* Make input fields take full width of their container */
+    padding: 0.75rem 1rem; /* Consistent padding */
+    border: 1px solid var(--color-medium-gray); /* Subtle border */
+    border-radius: 8px; /* Consistent border-radius */
+    background-color: var(--color-black); /* Dark background for inputs */
+    color: var(--color-off-white); /* White text for input */
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    -webkit-appearance: none; /* Remove default styling for consistency across browsers */
+    -moz-appearance: none;
+    appearance: none;
+    box-sizing: border-box; /* Crucial: Include padding and border in the element's total width and height */
+}
+
+.form-group .input-field:focus,
+.login-card input[type="email"]:focus,
+.login-card input[type="password"]:focus {
+    outline: none;
+    border-color: var(--color-pastel-purple); /* Highlight on focus */
+    box-shadow: 0 0 0 3px rgba(221, 160, 221, 0.3); /* Soft glow on focus */
+}
+
+/* Style for password input with eye icon (if implemented with background image) */
+.password-input-container {
+    position: relative;
+    width: 100%; /* Ensure container takes full width */
+}
+
+.password-input-container .input-field {
+    padding-right: 2.5rem; /* Space for the eye icon */
+}
+
+.password-input-container .toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-off-white); /* Color for eye icon */
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2; /* Ensure icon is above the input */
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Align checkbox and text to the left */
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--color-off-white); /* Text color for remember me */
+}
+
+.remember-me input[type="checkbox"] {
+    margin-right: 8px;
+    accent-color: var(--color-pastel-purple); /* Color the checkbox */
+    width: 16px; /* Adjust checkbox size */
+    height: 16px; /* Adjust checkbox size */
+    cursor: pointer;
+}
+
+.login-button {
+    width: 100%; /* Full width button */
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    background: var(--color-pastel-purple); /* Primary button color */
+    color: var(--color-black); /* Black text on button */
+    border: none; /* No border for the button */
+    margin-bottom: 1rem; /* Space after the main login button */
+}
+
+.login-button:hover {
+    background: #c288c2; /* Slightly darker pastel purple on hover */
+    transform: translateY(-2px);
+}
+
+.forgot-password,
+.register-link,
+.guest-login {
+    display: block; /* Make these links block elements to stack them */
+    text-decoration: none;
+    color: var(--color-pastel-purple); /* Pastel purple for links */
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem; /* Space between links */
+    transition: color 0.3s ease;
+}
+
+.forgot-password:hover,
+.register-link:hover,
+.guest-login:hover {
+    color: var(--color-off-white); /* White on hover */
+}
+
+.guest-login {
+    margin-top: 1.5rem; /* More space above guest login */
+    font-weight: 500;
+}
+
+/* Close button for the modal (if applicable) */
+.close-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: var(--color-off-white);
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-button:hover {
+    color: var(--color-pastel-purple);
+}
+
+/* Responsive adjustments for the login card if needed */
+@media (max-width: 768px) {
+    .login-card {
+        padding: 1.5rem;
+        gap: 1rem;
+    }
+    .login-card h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    .form-group {
+        margin-bottom: 0.8rem;
+    }
+    .form-group .input-field,
+    .login-button {
+        padding: 0.65rem 0.8rem;
+        font-size: 1rem;
+    }
+    .remember-me {
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+    }
+    .forgot-password,
+    .register-link,
+    .guest-login {
+        font-size: 0.8rem;
+        margin-bottom: 0.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-card {
+        padding: 1rem;
+    }
+    .login-card h2 {
+        font-size: 1.3rem;
+    }
+    .login-card .colosal-logo {
+        width: 120px;
+    }
+    .form-group .input-field,
+    .login-button {
+        padding: 0.5rem 0.7rem;
+        font-size: 0.9rem;
+    }
+    .remember-me input[type="checkbox"] {
+        width: 14px;
+        height: 14px;
+    }
+}
