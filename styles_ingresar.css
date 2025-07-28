@@ -1,3 +1,5 @@
+/* styles_ingresar.css */
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
 body {
@@ -150,7 +152,9 @@ input::placeholder {
 }
 
 /* Ajuste para el input de la contraseña para dejar espacio al icono */
-.password-input-container input#password { /* Selector más específico */
+/* CAMBIO AQUI: Ahora apunta a ambos IDs de contraseña */
+.password-input-container input#registerPassword,
+.password-input-container input#loginPassword { 
     padding-left: 40px; /* Deja espacio para el icono del ojo */
     padding-right: 10px; /* Mantiene un poco de padding a la derecha */
     width: 100%; /* Asegura que ocupe todo el ancho disponible */
@@ -195,10 +199,17 @@ a:hover {
 }
 
 .error-message {
-    color: #cc0000; /* Rojo para los mensajes de error para visibilidad */
-    font-size: 13px;
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
     display: none;
-    margin-top: 3px;
+}
+
+.success-message {
+    color: green; /* Color para mensajes de éxito */
+    font-size: 0.9em;
+    margin-top: 5px;
+    display: none; /* Asegúrate de que estén ocultos por defecto */
 }
 
 .register-link {
@@ -347,7 +358,9 @@ a:hover {
         left: 8px; /* Ajusta la posición izquierda en pantallas medianas */
     }
 
-    .password-input-container input#password {
+    /* CAMBIO AQUI: Ahora apunta a ambos IDs de contraseña */
+    .password-input-container input#registerPassword,
+    .password-input-container input#loginPassword {
         padding-left: 35px; /* Ajusta el padding para el icono en pantallas medianas */
     }
 
@@ -416,7 +429,9 @@ a:hover {
         left: 6px; /* Ajusta la posición izquierda en pantallas pequeñas */
     }
 
-    .password-input-container input#password {
+    /* CAMBIO AQUI: Ahora apunta a ambos IDs de contraseña */
+    .password-input-container input#registerPassword,
+    .password-input-container input#loginPassword {
         padding-left: 30px; /* Ajusta el padding para el icono en pantallas pequeñas */
     }
 
