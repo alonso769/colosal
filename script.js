@@ -1,183 +1,3 @@
-// Joinnus Clone JavaScript
-
-// --- Global Event Data ---
-// Define tus eventos aquí. Cada objeto debe tener un ID único
-// y todos los detalles que quieres mostrar en la página de detalles.
-const eventsData = [
-    {
-        id: 'band-event-1',
-        title: 'Concierto Exclusivo: Banda de Rock Peruana',
-        image: 'images/band-event-1.jpg',
-        dateTime: '28 JUL. 2025 - 09:00 PM',
-        address: 'Barranco Arena',
-        city: 'Lima, PE',
-        fullAddress: 'Av. Bolognesi 123, Barranco',
-        description: `Prepárate para una noche inolvidable con la banda de rock peruana más aclamada del momento. Disfruta de sus grandes éxitos y nuevas canciones en un ambiente vibrante. Un espectáculo lleno de energía y pasión por la música.`,
-        additionalInfo: `Las puertas abren a las 8:00 PM. Se recomienda llegar temprano. Consumo de alcohol solo para mayores de 18 años con DNI. No se permite el ingreso con bebidas ni alimentos.`,
-        tickets: [
-            { name: 'Entrada General', price: 90.00 },
-            { name: 'Entrada VIP (Acceso backstage)', price: 150.00 }
-        ],
-        organizer: 'ROCK & ROLL PRODUCCIONES',
-        mapCoords: [-12.1490, -77.0250] // Coordenadas de Barranco Arena (ejemplo)
-    },
-    {
-        id: 'band-event-2',
-        title: 'Festival Andino de Rock',
-        image: 'images/band-event-2.jpg',
-        dateTime: '15 AGO. 2025 - 07:00 PM',
-        address: 'Teatro Municipal',
-        city: 'Cusco, PE',
-        fullAddress: 'Calle Mesón de la Estrella 149, Cusco',
-        description: `Un festival que fusiona el rock con sonidos andinos, presentando a bandas emergentes y consolidadas de la región. Una experiencia cultural y musical única en el corazón del Cusco.`,
-        additionalInfo: `Evento apto para todas las edades. Menores de 12 años deben ingresar con un adulto. Prohibido el ingreso de alimentos y bebidas.`,
-        tickets: [
-            { name: 'Zona Platea', price: 70.00 },
-            { name: 'Zona Balcón', price: 50.00 }
-        ],
-        organizer: 'CUSCO CULTURAL EVENTS',
-        mapCoords: [-13.5167, -71.9778] // Coordenadas de Teatro Municipal Cusco (ejemplo)
-    },
-    {
-        id: 'band-event-3',
-        title: 'Rock bajo el Misti',
-        image: 'images/band-event-3.jpg',
-        dateTime: '03 SEP. 2025 - 08:30 PM',
-        address: 'Jardín de la Cerveza',
-        city: 'Arequipa, PE',
-        fullAddress: 'Av. Ejército s/n, Arequipa',
-        description: `Las mejores bandas de rock de Arequipa se unen para una noche épica bajo el majestuoso volcán Misti. Cerveza, música y mucha energía.`,
-        additionalInfo: `Se requiere DNI para el ingreso. Prohibido el ingreso de botellas de vidrio. Zonas de comida y bebida disponibles.`,
-        tickets: [
-            { name: 'General', price: 60.00 },
-            { name: 'Preferencial', price: 100.00 }
-        ],
-        organizer: 'AREQUIPA CONCIERTOS',
-        mapCoords: [-16.3989, -71.5369] // Coordenadas del Jardín de la Cerveza (ejemplo)
-    },
-    {
-        id: 'band-event-4',
-        title: 'Trujillo Metal Fest',
-        image: 'images/band-event-4.jpg',
-        dateTime: '20 SEP. 2025 - 07:00 PM',
-        address: 'Coliseo Gran Chimú',
-        city: 'Trujillo, PE',
-        fullAddress: 'Av. Gerónimo de la Torre s/n, Trujillo',
-        description: `Un festival dedicado al metal en Trujillo. Bandas nacionales e internacionales se darán cita para una descarga de potencia sonora.`,
-        additionalInfo: `No se permite el ingreso de objetos punzocortantes. Se verificará la edad al ingreso.`,
-        tickets: [
-            { name: 'Campo', price: 85.00 },
-            { name: 'Gradería', price: 65.00 }
-        ],
-        organizer: 'METALHEAD PRODUCCIONES',
-        mapCoords: [-8.1065, -79.0305] // Coordenadas del Coliseo Gran Chimú (ejemplo)
-    },
-    {
-        id: 'band-event-5',
-        title: 'Noche de Punk en Chiclayo',
-        image: 'images/band-event-5.jpg',
-        dateTime: '05 OCT. 2025 - 08:00 PM',
-        address: 'Estadio Elías Aguirre',
-        city: 'Chiclayo, PE',
-        fullAddress: 'Av. Sáenz Peña 700, Chiclayo',
-        description: `Celebra el espíritu punk con bandas icónicas de la escena local y nacional. Una noche de rebeldía y buena música en Chiclayo.`,
-        additionalInfo: `Se recomienda el uso de calzado cómodo. Edad mínima 18 años.`,
-        tickets: [
-            { name: 'General', price: 50.00 },
-            { name: 'Palco (vista preferencial)', price: 90.00 }
-        ],
-        organizer: 'PUNK ROCK COLLECTIVE',
-        mapCoords: [-6.7725, -79.8454] // Coordenadas del Estadio Elías Aguirre (ejemplo)
-    },
-    {
-        id: 'featured-event-1',
-        title: 'Festival de Verano Rock',
-        image: 'images/featured-event-1.jpg',
-        dateTime: '15 DIC. 2025 - 06:00 PM',
-        address: 'Parque de la Exposición',
-        city: 'Lima, PE',
-        fullAddress: 'Av. 28 de Julio, Lima',
-        description: `Una noche inolvidable con las mejores bandas de rock locales. Disfruta de un ambiente al aire libre con excelente música y gastronomía.`,
-        additionalInfo: `Evento familiar. Niños menores de 10 años no pagan. Se prohíbe el ingreso de mascotas.`,
-        tickets: [
-            { name: 'Entrada General', price: 45.00 },
-            { name: 'Pack Familiar (4 personas)', price: 150.00 }
-        ],
-        organizer: 'FESTIVALES DE VERANO',
-        mapCoords: [-12.0621, -77.0371] // Coordenadas del Parque de la Exposición (ejemplo)
-    },
-    {
-        id: 'featured-event-2',
-        title: 'Conferencia de Innovación Musical',
-        image: 'images/featured-event-2.jpg',
-        dateTime: '22 ENE. 2026 - 09:00 AM',
-        address: 'Centro de Convenciones de Lima',
-        city: 'Lima, PE',
-        fullAddress: 'Av. de la Cultura 220, San Borja',
-        description: `Explora las últimas tendencias y tecnologías en la industria musical. Charlas, talleres y networking con expertos del sector.`,
-        additionalInfo: `Incluye coffee break y certificado de participación.`,
-        tickets: [
-            { name: 'Acceso General (1 día)', price: 120.00 },
-            { name: 'Pase Completo (3 días)', price: 300.00 }
-        ],
-        organizer: 'MUSIC TECH SUMMIT',
-        mapCoords: [-12.0917, -76.9930] // Coordenadas del Centro de Convenciones de Lima (ejemplo)
-    },
-    {
-        id: 'featured-event-3',
-        title: 'Noche de Jazz & Blues',
-        image: 'images/featured-event-3.jpg',
-        dateTime: '28 FEB. 2026 - 08:00 PM',
-        address: 'Gran Teatro Nacional',
-        city: 'Lima, PE',
-        fullAddress: 'Av. Javier Prado Este 2225, San Borja',
-        description: `Disfruta de una velada elegante con los clásicos del jazz y blues interpretados por artistas de talla nacional e internacional.`,
-        additionalInfo: `Código de vestimenta formal. Consumo de bebidas disponible en el lobby.`,
-        tickets: [
-            { name: 'Zona Preferencial', price: 70.00 },
-            { name: 'Zona VIP', price: 100.00 },
-            { name: 'Palco (4 personas)', price: 250.00 }
-        ],
-        organizer: 'JAZZ BLUES SHOWS',
-        mapCoords: [-12.0945, -76.9932] // Coordenadas del Gran Teatro Nacional (ejemplo)
-    },
-    {
-        id: 'featured-event-4',
-        title: 'Batalla de Bandas Emergentes',
-        image: 'images/featured-event-4.jpg',
-        dateTime: '05 MAR. 2026 - 07:30 PM',
-        address: 'Sargento Pimienta',
-        city: 'Barranco, PE',
-        fullAddress: 'Av. Bolognesi 757, Barranco',
-        description: `Descubre nuevos talentos y apoya la escena musical local en esta emocionante batalla de bandas. ¡Tú eliges al ganador!`,
-        additionalInfo: `Solo mayores de 18 años. ID obligatoria.`,
-        tickets: [
-            { name: 'Entrada General', price: 25.00 },
-            { name: 'Entrada con Bebida', price: 40.00 }
-        ],
-        organizer: 'TALENTOS OCULTOS',
-        mapCoords: [-12.1480, -77.0255] // Coordenadas de Sargento Pimienta (ejemplo)
-    },
-    // El evento "BAR CRAWL LIMA" que me pasaste como imagen
-    {
-        id: 'bar-crawl-lima',
-        title: 'BAR CRAWL LIMA: TOUR DE BARES POR BARRANCO',
-        image: 'images/bar-crawl-lima.jpg', // Asegúrate de tener esta imagen en tu carpeta 'images'
-        dateTime: '14, 15 y 16 de Julio - 08:30 PM',
-        address: 'Puerta Principal de la Iglesia del Parque Municipal de Barranco',
-        city: 'Lima, PE',
-        fullAddress: 'Frente a la Parroquia La Santísima Cruz, Parque Municipal de Barranco',
-        description: `¿Deseas experimentar la mejor fiesta de Lima mientras conoces gente nueva de Perú u otras partes del mundo? Ahora Bar Crawl Lima abre en Barranco, luego de más de 10 años en las noches miraflorinas y con salidas cada semana. Descubriremos el distrito más bohemio de Lima llevándote a los mejores lugares de fiesta. Te llevaremos a los 3 bares donde recibirás 1 shot de bienvenida, así como los mejores precios en bebidas y terminar la salida bailando hasta no más dar. También podrás conocer personas de todas partes del mundo y hacerte sentir como en casa con diferentes juegos y dinámicas a lo largo de la noche.`,
-        additionalInfo: `Nuestro recorrido inicia a las 8:30 PM. Nos encontramos en la puerta de la Iglesia en el Parque Municipal de Barranco, donde nos pueden reconocer por los paraguas amarillos con el logo de Bar Crawl Lima. Esperaremos unos 15 minutos a las personas que demoraron o asisten al recorrido al momento. Cada salida de tour tiene una duración aproximada de 1 hora. En el primero, la idea es conocernos entre todos los asistentes y generar un buen vínculo. En el segundo comenzamos los juegos y nos iremos preparando para el tercer bar, que suele tener música bailable. Aproximadamente a la medianoche ingresaremos al último lugar, en la que pueden permanecer hasta la hora ustedes deseen. Cabe mencionar que se ofrece 1 shot gratis por bar, así como descuentos especiales exclusivos para el grupo de Bar Crawl Lima para que así solo te preocupes en pasarla muy bien. El código de vestimenta es: No sandalias, no shorts, no buzos, no ropa de baño ni ropa deportiva, ya que los lugares podrían reservarse su derecho de admisión por ello. Atención: por un itinerario a seguir con el fin del éxito del recorrido y por respeto a los demás clientes ya que algunos bares tienen aforo. Es obligatorio presentar el DNI físico para el ingreso a los bares y para el consumo de alcohol. La edad mínima es de 18 años.`,
-        tickets: [
-            { name: 'BAR CRAWL LIMA TICKETS', price: 80.00 },
-            { name: 'BAR CRAWL LIMA TICKETS - Gratidays', price: 54.00 }
-        ],
-        organizer: 'JOINNUS SAC', // O el organizador real si es diferente
-        mapCoords: [-12.1466, -77.0229] // Coordenadas del Parque Municipal de Barranco
-    }
-];
-
 // --- General DOM Elements (used across pages) ---
 // Estos elementos solo existen en index.html, así que los seleccionamos condicionalmente
 const carouselTrack = document.querySelector('.carousel-track');
@@ -325,22 +145,19 @@ if (carouselTrack) {
             updateDots(currentIndex);
         } 
         // If we are on the cloned last slide (which is visually the original first slide)
-        else if (visibleClonedIndex === 0) { // Index of the cloned last slide (at the beginning)
+        else if (visibleClonedIndex === 0) {
             carouselTrack.style.transition = 'none';
             carouselTrack.style.transform = `translateX(-${(carouselSlides.length - 2) * slideWidth}px)`; // Jump to the real last slide
             currentIndex = carouselSlides.length - 3; // Adjust to the last original slide's index
             updateDots(currentIndex);
         }
         
-        // Re-enable transition after a very small delay to allow the jump to render
         setTimeout(() => {
             carouselTrack.style.transition = 'transform 0.5s ease-in-out';
         }, 50);
     });
 }
 
-// --- New Gallery Carousel Logic ---
-// This assumes a separate gallery carousel with its own buttons/track
 let galleryCarouselTrack = document.querySelector('.gallery-carousel-track');
 let galleryCarouselSlides = galleryCarouselTrack ? Array.from(document.querySelectorAll('.gallery-carousel-slide')) : [];
 let galleryCurrentIndex = 0;
@@ -391,22 +208,40 @@ if (galleryPrevButton) {
 // --- Event Details Page Specific Logic ---
 let currentMap = null; // Variable para almacenar la instancia del mapa
 
-function setupEventDetailsPage() {
+async function setupEventDetailsPage() {
     const urlParams = new URLSearchParams(window.location.search);
     const eventId = urlParams.get('id'); // Obtener el ID del evento de la URL
 
-    const selectedEvent = eventsData.find(event => event.id === eventId);
+    if (!eventId) {
+        console.error('ID de evento no proporcionado en la URL.');
+        document.querySelector('.event-details-content .container').innerHTML = '<h2 style="text-align:center; color:var(--color-off-white);">ID de evento no encontrado.</h2>';
+        return;
+    }
+
+    let selectedEvent = null;
+    try {
+        const response = await fetch(`http://localhost:3000/api/events/${eventId}`);
+        if (!response.ok) {
+            if (response.status === 404) {
+                throw new Error('Evento no encontrado.');
+            }
+            throw new Error(`Error HTTP: ${response.status}`);
+        }
+        selectedEvent = await response.json();
+    } catch (error) {
+        console.error('Error al cargar los detalles del evento:', error);
+        document.querySelector('.event-details-content .container').innerHTML = `<h2 style="text-align:center; color:var(--color-off-white);">Error al cargar el evento: ${error.message}</h2>`;
+        return;
+    }
 
     if (!selectedEvent) {
         console.error('Evento no encontrado para el ID:', eventId);
-        // Podrías redirigir a una página de error o mostrar un mensaje
         document.querySelector('.event-details-content .container').innerHTML = '<h2 style="text-align:center; color:var(--color-off-white);">Evento no encontrado.</h2>';
         return;
     }
 
     // Rellenar el contenido de la página con los datos del evento
     document.title = `Detalles del Evento - ${selectedEvent.title}`;
-    // Si tienes un elemento con ID 'event-detail-title' para el título principal de la página de detalles
     const pageTitleElement = document.getElementById('event-detail-title');
     if (pageTitleElement) {
         pageTitleElement.textContent = `Detalles del Evento - ${selectedEvent.title}`;
@@ -529,7 +364,7 @@ function setupEventDetailsPage() {
     
     // Initialize map if it exists
     const mapElement = document.getElementById('map');
-    if (mapElement && selectedEvent.mapCoords) {
+    if (mapElement && selectedEvent.mapCoords && selectedEvent.mapCoords.length === 2) {
         // Destruir mapa existente si lo hay para evitar duplicados al recargar dinámicamente
         if (currentMap) {
             currentMap.remove();
@@ -546,14 +381,129 @@ function setupEventDetailsPage() {
         
         // Actualizar enlace de Google Maps
         if (viewMapLink) {
-            // Asegúrate de que esta URL sea correcta. Usualmente es https://www.google.com/maps/search/?api=1&query=LAT,LONG
             viewMapLink.href = `https://www.google.com/maps/search/?api=1&query=${selectedEvent.mapCoords[0]},${selectedEvent.mapCoords[1]}`;
         }
+    } else if (mapElement) {
+        mapElement.innerHTML = '<p>Coordenadas de mapa no disponibles para este evento.</p>';
+        mapElement.style.display = 'flex'; // Asegura que el mensaje sea visible
+        mapElement.style.justifyContent = 'center';
+        mapElement.style.alignItems = 'center';
+        mapElement.style.minHeight = '200px';
     }
 }
 
+// Nueva función para renderizar eventos en la página principal (menu.html o index.html)
+async function renderEventsOnMenuPage() {
+    const upcomingEventsList = document.querySelector('.upcoming-events-list');
+    const featuredEventsGrid = document.querySelector('.events-grid');
 
-// --- General Interactions (apply to both pages) ---
+    if (!upcomingEventsList && !featuredEventsGrid) {
+        return; // No estamos en la página que necesita renderizar eventos
+    }
+
+    // Limpiar contenido inicial (Loading...)
+    if (upcomingEventsList) upcomingEventsList.innerHTML = '<p style="text-align:center; color:var(--color-off-white);">Cargando conciertos...</p>';
+    if (featuredEventsGrid) featuredEventsGrid.innerHTML = '<p style="text-align:center; color:var(--color-off-white);">Cargando eventos destacados...</p>';
+
+    let allEvents = [];
+    try {
+        const response = await fetch('http://localhost:3000/api/events');
+        if (!response.ok) {
+            throw new Error(`Error HTTP: ${response.status}`);
+        }
+        allEvents = await response.json();
+        
+        if (allEvents.length === 0) {
+            if (upcomingEventsList) upcomingEventsList.innerHTML = '<p style="text-align:center; color:var(--color-off-white);">No hay conciertos disponibles en este momento.</p>';
+            if (featuredEventsGrid) featuredEventsGrid.innerHTML = '<p style="text-align:center; color:var(--color-off-white);">No hay eventos destacados disponibles en este momento.</p>';
+            return;
+        }
+
+    } catch (error) {
+        console.error('Error al cargar los eventos:', error);
+        if (upcomingEventsList) upcomingEventsList.innerHTML = `<p style="text-align:center; color:var(--color-off-white);">Error al cargar conciertos: ${error.message}</p>`;
+        if (featuredEventsGrid) featuredEventsGrid.innerHTML = `<p style="text-align:center; color:var(--color-off-white);">Error al cargar eventos destacados: ${error.message}</p>`;
+        return;
+    }
+
+    // Filtrar eventos de banda para la sección "Próximos Conciertos de la Banda"
+    // Asumimos que los eventos de banda tienen un ID que empieza con 'band-event'
+    const bandEvents = allEvents.filter(event => event.id.startsWith('band-event'));
+    if (upcomingEventsList) {
+        upcomingEventsList.innerHTML = ''; // Limpiar el mensaje de carga
+        if (bandEvents.length > 0) {
+            bandEvents.forEach(event => {
+                const eventCard = createUpcomingEventCard(event);
+                upcomingEventsList.appendChild(eventCard);
+            });
+        } else {
+            upcomingEventsList.innerHTML = '<p style="text-align:center; color:var(--color-off-white);">No hay conciertos de banda próximos.</p>';
+        }
+    }
+
+    // Filtrar eventos destacados para la sección "Eventos Destacados"
+    // Asumimos que los eventos destacados tienen un ID que empieza con 'featured-event' o 'bar-crawl-lima'
+    const featuredEvents = allEvents.filter(event => 
+        event.id.startsWith('featured-event') || event.id === 'bar-crawl-lima'
+    );
+    if (featuredEventsGrid) {
+        featuredEventsGrid.innerHTML = ''; // Limpiar el mensaje de carga
+        if (featuredEvents.length > 0) {
+            featuredEvents.forEach(event => {
+                const eventCard = createFeaturedEventCard(event);
+                featuredEventsGrid.appendChild(eventCard);
+            });
+        } else {
+            featuredEventsGrid.innerHTML = '<p style="text-align:center; color:var(--color-off-white);">No hay eventos destacados disponibles.</p>';
+        }
+    }
+    
+    // Re-observar elementos para animaciones después de renderizar
+    document.querySelectorAll('.event-card, .upcoming-event-card').forEach(el => {
+        observer.observe(el);
+    });
+}
+
+function createUpcomingEventCard(event) {
+    const card = document.createElement('div');
+    card.classList.add('upcoming-event-card');
+    card.innerHTML = `
+        <img src="${event.image}" alt="${event.title}">
+        <p class="event-date">${event.dateTime.split(' - ')[0]} - ${event.city.split(',')[0].toUpperCase()}</p>
+        <p class="event-location">${event.address}</p>
+        <a href="event_details.html?id=${event.id}" class="btn btn-primary btn-sm view-concert-btn" data-event-id="${event.id}">Ver Concierto</a>
+    `;
+    return card;
+}
+
+function createFeaturedEventCard(event) {
+    const card = document.createElement('div');
+    card.classList.add('event-card');
+
+    const dateParts = event.dateTime.split(' ')[0]; // "DD"
+    const monthPart = event.dateTime.split(' ')[1].replace('.', ''); // "MES."
+
+    card.innerHTML = `
+        <div class="event-image" style="background-image: url('${event.image}');">
+            <div class="event-date">
+                <span class="day">${dateParts}</span>
+                <span class="month">${monthPart}</span>
+            </div>
+        </div>
+        <div class="event-content">
+            <h3 class="event-title">${event.title}</h3>
+            <p class="event-location">${event.address}, ${event.city.split(',')[0]}</p>
+            <p class="event-description">${event.description.substring(0, 80)}...</p>
+            <div class="event-footer">
+                <span class="event-price">Desde S/ ${event.tickets[0] ? event.tickets[0].price.toFixed(2) : 'N/A'}</span>
+                <a href="event_details.html?id=${event.id}" class="btn btn-primary btn-sm" data-event-id="${event.id}">Obtener Entradas</a>
+            </div>
+        </div>
+    `;
+    return card;
+}
+
+
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -598,9 +548,10 @@ const observer = new IntersectionObserver((entries) => {
 }, observerOptions);
 
 // Observe only elements relevant to the current page if needed
-document.querySelectorAll('.event-card, .upcoming-event-card').forEach(el => {
-    observer.observe(el);
-});
+// NOTA: Estos selectores se aplicarán después de que los eventos sean renderizados dinámicamente
+// document.querySelectorAll('.event-card, .upcoming-event-card').forEach(el => {
+//     observer.observe(el);
+// });
 
 // For the new gallery elements
 document.querySelectorAll('.gallery-carousel-slide, .collage-item').forEach(el => {
@@ -675,11 +626,11 @@ Características:
 
 // Initialize app
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Joinnus Clone cargado exitosamente!');
+    console.log('Colosal cargado exitosamente!'); // Cambiado a Colosal
     
     // Check if on index.html or event_details.html
     if (document.querySelector('.hero-carousel-section')) {
-        // Logic for index.html
+        // Logic for index.html (or menu.html if it's the main landing)
         if (carouselTrack && carouselSlides.length > 0) {
             setupCarousel();
             cloneSlides(); // Call cloneSlides after setupCarousel to get initial width
@@ -687,7 +638,7 @@ document.addEventListener('DOMContentLoaded', () => {
             updateDots(currentIndex); // Ensure the first dot is active on load
             startAutoSlide();
         } else {
-             console.warn("Hero carousel elements not found. Hero carousel functionality will not work.");
+            console.warn("Hero carousel elements not found. Hero carousel functionality will not work.");
         }
 
         if (galleryCarouselTrack && galleryCarouselSlides.length > 0) {
@@ -695,6 +646,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             console.warn("Gallery carousel elements not found. Gallery carousel functionality might not work.");
         }
+        renderEventsOnMenuPage(); // Llama a esta función para cargar los eventos en menu.html/index.html
     } else if (document.querySelector('.event-details-content')) {
         // Logic for event_details.html
         setupEventDetailsPage();
