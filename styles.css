@@ -31,14 +31,30 @@ body {
 
 /* Header Styles */
 .header {
-    background: var(--color-black); /* Fondo del header negro */
-    box-shadow: 0 2px 10px rgba(255, 255, 255, 0.05); /* Sombra sutil blanca */
-    position: relative;
+    background: var(--color-black);
+    box-shadow: 0 2px 10px rgba(255, 255, 255, 0.05);
+    /* PROPIEDAD CLAVE: Hace el header fijo al hacer scroll */
+    position: sticky;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 1000;
+    transition: all 0.3s ease; /* Transición suave para el efecto de scroll */
 }
+
+/* Efecto de scroll: el header se hace más compacto */
+.header.scrolled {
+    padding: 0.5rem 0;
+    background: rgba(0, 0, 0, 0.95); /* Fondo semitransparente para un efecto "flotante" */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+.header.scrolled .logo .joinnus-header-logo {
+    height: 30px;
+}
+.header.scrolled .nav-wrapper {
+    padding: 0;
+}
+
 
 .nav-wrapper {
     display: flex;
@@ -46,29 +62,49 @@ body {
     align-items: center;
     padding: 1rem 0;
     position: relative;
+    transition: padding 0.3s ease;
 }
 
 .logo .joinnus-header-logo {
-    height: 40px; /* Ajusta el tamaño de tu logo si usas una imagen */
-    filter: brightness(0) invert(1); /* Hace que el logo se vea blanco si es oscuro */
+    height: 40px;
+    filter: brightness(0) invert(1);
     width: auto;
+    transition: height 0.3s ease;
 }
 
 .nav {
     display: flex;
     gap: 2rem;
+    align-items: center;
 }
 
 .nav-link {
     text-decoration: none;
-    color: var(--color-off-white); /* Texto de navegación blanco hueso */
+    color: var(--color-off-white);
     font-weight: 500;
     transition: color 0.3s ease;
+    position: relative;
 }
 
 .nav-link:hover {
-    color: var(--color-pastel-purple); /* Hover morado pastel */
+    color: var(--color-pastel-purple);
 }
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--color-pastel-purple);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
 
 .auth-buttons {
     display: flex;
@@ -132,10 +168,10 @@ body {
 .carousel-container {
     position: relative;
     width: 100%;
-    height: 100%;
-    /* Efecto "flotante" para el carrusel */
+    /* Altura fija para el carrusel en la vista de escritorio */
+    height: 400px;
     box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
-    border-radius: 15px; /* Bordes redondeados */
+    border-radius: 15px;
     overflow: hidden;
 }
 
@@ -153,15 +189,15 @@ body {
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    background-color: var(--color-off-white); /* Blanco hueso para slides */
+    background-color: var(--color-black); /* Fondo negro para los espacios vacíos */
 }
 
 .carousel-slide img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* SE MANTIENE 'cover' AQUÍ */
+    object-fit: contain; /* ¡CAMBIADO A 'contain'! Asegura que toda la imagen sea visible */
     object-position: center;
-    filter: brightness(80%); /* Un poco más oscuro para que el texto resalte si hubiera */
+    filter: brightness(100%); /* Brillo normal para que la imagen se vea tal cual */
 }
 
 /* Carousel Navigation Buttons */
@@ -354,12 +390,18 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-size: cover; /* SE MANTIENE 'cover' AQUÍ */
+    /* CAMBIO CLAVE AQUÍ */
+    background-size: contain; 
+    /* Propiedad adicional para que la imagen no se repita si es más pequeña */
+    background-repeat: no-repeat; 
+    /* Propiedad adicional para rellenar el espacio vacío */
+    background-color: var(--color-black); 
+    
     background-position: center;
 }
 
 .event-date {
-    background: var(--color-off-white); /* Fondo de fecha blanco hueso */
+    background: #F5F5DC; /* Blanco hueso */
     padding: 1rem;
     border-radius: 8px;
     text-align: center;
@@ -530,15 +572,25 @@ body {
     background-color: var(--color-black);
 }
 
+/* Busca esta sección en tu código */
 .event-image-banner {
     width: 100%;
     height: 100%;
-    background-size: cover; /* SE MANTIENE 'cover' AQUÍ */
+    
+    /* CAMBIO CLAVE AQUÍ: cambia 'cover' por 'contain' */
+    background-size: contain; 
+    
     background-position: center;
     filter: brightness(60%); /* Oscurece la imagen para que el texto resalte */
     position: absolute;
     top: 0;
     left: 0;
+    
+    /* Añade esta línea para que el fondo del espacio vacío sea negro */
+    background-color: var(--color-black);
+    
+    /* Y esta para asegurar que la imagen no se repita */
+    background-repeat: no-repeat;
 }
 
 .event-info-overlay {
@@ -579,10 +631,6 @@ body {
     grid-template-columns: 2fr 1fr; /* Columna de descripción más grande que la de tickets */
     gap: 40px;
     margin-bottom: 40px;
-}
-
-.event-description-col {
-    /* No hay estilos de fondo aquí, el card lo manejará */
 }
 
 .event-info-card,
@@ -675,7 +723,6 @@ body {
     background: var(--color-black); /* Fondo de input negro */
     color: var(--color-off-white);
     font-size: 1rem;
-    -moz-appearance: textfield; /* Para ocultar flechas en Firefox */
 }
 
 /* Ocultar flechas en Chrome, Safari, Edge */
@@ -823,6 +870,13 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 
+/* Ajustes de tamaño del carrusel para móviles */
+@media (max-width: 768px) {
+    .carousel-container {
+        height: 250px; /* Altura más pequeña para dispositivos móviles */
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
     .event-detail-hero {
@@ -854,7 +908,12 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 @media (max-width: 768px) {
-    /* Mobile Menu Button */
+    /* Oculta los elementos de navegación en escritorio */
+    .nav, .auth-buttons {
+        display: none;
+    }
+
+    /* Muestra el botón de menú móvil */
     .mobile-menu-btn {
         display: block;
         position: absolute;
@@ -864,46 +923,50 @@ input[type="number"]::-webkit-inner-spin-button {
         background: none;
         border: none;
         font-size: 2rem;
-        color: var(--color-off-white); /* Botón blanco hueso */
+        color: var(--color-off-white);
         cursor: pointer;
         z-index: 1002;
     }
-    
-    .nav-wrapper {
-        flex-direction: column;
-        align-items: flex-start;
-        padding-bottom: 0;
-    }
-    .nav {
-        width: 100%;
-        flex-direction: column;
-        display: none;
-        margin-top: 1rem;
-        padding-left: 0;
-        background: var(--color-dark-gray); /* Fondo del menú móvil */
-        border-radius: 0 0 10px 10px;
-    }
+
+    /* Estilos del menú abierto (dropdown) */
     .nav.mobile-nav-open {
-        display: flex !important;
-    }
-    .auth-buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        top: 100%;
+        left: 0;
         width: 100%;
-        justify-content: center;
-        margin-top: 1rem;
-        display: none;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 1001;
+        padding-top: 1rem;
+        padding-bottom: 2rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     }
+    
+    /* Botones de autenticación en el menú móvil */
     .auth-buttons.mobile-nav-open {
-        display: flex !important;
+        display: flex;
         flex-direction: column;
         gap: 10px;
         width: 100%;
         margin-top: 10px;
-        padding-bottom: 10px;
-        border-top: 1px solid var(--color-medium-gray);
-        background: var(--color-dark-gray); /* Fondo de botones móviles */
-        border-radius: 0 0 10px 10px;
+        padding: 0 20px;
+        box-sizing: border-box;
+        z-index: 1001;
     }
 
+    /* Ajustes para los enlaces en el menú móvil */
+    .nav .nav-link {
+        font-size: 1.2rem;
+        margin: 0.5rem 0;
+    }
+    
+    .auth-buttons.mobile-nav-open .btn {
+        width: 100%;
+    }
+
+    /* Ajustes específicos para otros elementos en móvil */
     .hero-carousel-section {
         height: 300px;
     }
@@ -1019,3 +1082,455 @@ input[type="number"]::-webkit-inner-spin-button {
 .mt-1 { margin-top: 1rem; }
 .mt-2 { margin-top: 2rem; }
 .mt-3 { margin-top: 3rem; }
+
+
+
+
+/*colosal evento */
+
+/* Sección de eventos Colosal */
+.colosal-upcoming-events {
+  padding: 2rem 0 4rem 0; /* Reduciendo el padding superior a 2rem */
+   background: var(--color-black);
+   text-align: center;
+}
+
+.colosal-upcoming-events-list {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 15px;
+    justify-content: flex-start;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-pastel-purple) var(--color-dark-gray);
+}
+
+.colosal-upcoming-events-list::-webkit-scrollbar {
+    height: 8px;
+}
+
+.colosal-upcoming-events-list::-webkit-scrollbar-track {
+    background: var(--color-dark-gray);
+    border-radius: 10px;
+}
+
+.colosal-upcoming-events-list::-webkit-scrollbar-thumb {
+    background: var(--color-pastel-purple);
+    border-radius: 10px;
+}
+
+.colosal-upcoming-events-list::-webkit-scrollbar-thumb:hover {
+    background: #c288c2;
+}
+
+.colosal-event-card {
+    flex: 0 0 auto;
+    width: 280px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+    background: var(--color-light-gray);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.colosal-event-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+}
+
+.colosal-event-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    background-color: var(--color-black);
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.colosal-event-card .event-date {
+    padding: 10px 15px 5px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-pastel-purple);
+}
+
+.colosal-event-card .event-location {
+    padding: 0 15px 15px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--color-off-white);
+    font-weight: 500;
+}
+
+.colosal-event-card .view-concert-btn {
+    margin: 0 15px 15px;
+    width: calc(100% - 30px);
+}
+/* Importar fuente Metal Mania */
+@import url('https://fonts.googleapis.com/css2?family=Metal+Mania&display=swap');
+
+/* Variables CSS */
+:root {
+    --color-black: #000000;
+    --color-light-gray: #2a2a2a;
+    --color-dark-gray: #1a1a1a;
+    --color-pastel-purple: #b19cd9;
+    --color-off-white: #f5f5f5;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--color-black);
+    font-family: Arial, sans-serif;
+}
+
+/* Sección de eventos Colosal */
+.colosal-upcoming-events {
+    padding: 4rem 0;
+    background: var(--color-black);
+    text-align: center;
+}
+
+/* Título */
+.colosal-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Metal Mania', cursive;
+    font-size: 5rem;
+    color: var(--color-off-white);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 3rem;
+    line-height: 0.9;
+    position: relative;
+    
+    /* Efectos grunge principales */
+    text-shadow: 
+        2px 2px 0 rgba(0, 0, 0, 0.8),
+        -1px -1px 0 rgba(255, 255, 255, 0.1),
+        3px 3px 5px rgba(0, 0, 0, 0.5),
+        0 0 10px rgba(255, 255, 255, 0.2);
+    
+    /* Filtros para efecto distorsionado */
+    filter: 
+        contrast(1.2) 
+        brightness(1.1) 
+        drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+}
+
+.title-line {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: -0.5rem 0;
+}
+
+.colosal-title::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 30%, transparent 2px, rgba(0,0,0,0.1) 3px, transparent 4px),
+        radial-gradient(circle at 80% 70%, transparent 1px, rgba(0,0,0,0.15) 2px, transparent 3px),
+        radial-gradient(circle at 40% 80%, transparent 1px, rgba(0,0,0,0.1) 2px, transparent 3px);
+    pointer-events: none;
+    mix-blend-mode: multiply;
+}
+
+.colosal-title .letter {
+    display: inline-block;
+    opacity: 0;
+    position: relative;
+    
+    /* Combinamos las animaciones */
+    animation: 
+        grungeLetterAppear 0.8s forwards calc(0.1s * var(--letter-index)),
+        pauseAndBob 5s linear infinite calc(0.8s + 0.1s * var(--letter-index));
+    
+    filter: 
+        drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.8))
+        drop-shadow(-1px -1px 1px rgba(255, 255, 255, 0.1));
+}
+
+/* Variaciones aleatorias para cada letra */
+.colosal-title .letter:nth-child(odd) {
+    text-shadow: 
+        2px 2px 0 rgba(0, 0, 0, 0.9),
+        -1px -1px 0 rgba(255, 255, 255, 0.15),
+        3px 3px 6px rgba(0, 0, 0, 0.6);
+}
+
+.colosal-title .letter:nth-child(even) {
+    text-shadow: 
+        1px 2px 0 rgba(0, 0, 0, 0.8),
+        -2px -1px 0 rgba(255, 255, 255, 0.1),
+        2px 4px 5px rgba(0, 0, 0, 0.5);
+}
+
+.colosal-title .letter:nth-child(3n) {
+    filter: 
+        contrast(1.3) 
+        brightness(0.95)
+        drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.7));
+}
+
+/* Efectos especiales para ciertas letras */
+.colosal-title .letter:nth-child(1),
+.colosal-title .letter:nth-child(16) {
+    color: var(--color-pastel-purple);
+    text-shadow: 
+        0 0 10px var(--color-pastel-purple),
+        2px 2px 0 rgba(0, 0, 0, 0.9),
+        -1px -1px 0 rgba(255, 255, 255, 0.2);
+    filter: brightness(1.2) drop-shadow(0 0 5px var(--color-pastel-purple));
+}
+
+/* Animación de entrada inicial al cargar la página */
+@keyframes grungeLetterAppear {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px) rotate(-5deg) scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) rotate(var(--random-rotation, 0deg)) scale(1);
+    }
+}
+
+/* Animación que incluye una pausa y el movimiento */
+@keyframes pauseAndBob {
+    0%, 80% { /* Pausa durante el 80% del tiempo (4 segundos) */
+        transform: translateY(0) rotate(0.5deg);
+    }
+    90% { /* Moverse en el 10% del tiempo (0.5 segundos) */
+        transform: translateY(-3px) rotate(-0.5deg);
+    }
+    100% { /* Regresar a la posición inicial en el último 10% (0.5 segundos) */
+        transform: translateY(0) rotate(0.5deg);
+    }
+}
+
+/* Efecto de textura de fondo para el título */
+.colosal-title::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -20px;
+    right: -20px;
+    bottom: -10px;
+    background: 
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 1px,
+            rgba(255, 255, 255, 0.02) 1px,
+            rgba(255, 255, 255, 0.02) 2px
+        ),
+        repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 1px,
+            rgba(0, 0, 0, 0.05) 1px,
+            rgba(0, 0, 0, 0.05) 2px
+        );
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Lista de eventos */
+.colosal-upcoming-events-list {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 15px;
+    justify-content: flex-start;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-pastel-purple) var(--color-dark-gray);
+    margin: 0 auto;
+    max-width: 1200px;
+    padding: 0 20px;
+}
+
+/* Scrollbar de la lista de eventos */
+.colosal-upcoming-events-list::-webkit-scrollbar {
+    height: 8px;
+}
+
+.colosal-upcoming-events-list::-webkit-scrollbar-track {
+    background: var(--color-dark-gray);
+    border-radius: 10px;
+}
+
+.colosal-upcoming-events-list::-webkit-scrollbar-thumb {
+    background: var(--color-pastel-purple);
+    border-radius: 10px;
+}
+
+.colosal-upcoming-events-list::-webkit-scrollbar-thumb:hover {
+    background: #c288c2;
+}
+
+/* Tarjeta de evento - Nuevo diseño de disco */
+.colosal-event-card {
+    flex: 0 0 auto;
+    width: 280px;
+    height: 380px;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    background: var(--color-light-gray);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    cursor: pointer;
+    padding-top: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.colosal-event-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+/* Imagen dentro de la tarjeta (el "disco") */
+.colosal-event-card img {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    background-color: var(--color-black);
+    padding: 15px;
+    box-sizing: border-box;
+    box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.1), 0 0 20px rgba(0, 0, 0, 0.8);
+    transition: transform 0.5s ease-in-out;
+}
+
+/* Efecto de rotación del disco al pasar el ratón */
+.colosal-event-card:hover img {
+    transform: translateX(-50%) rotate(360deg);
+}
+
+/* Estilo para el "centro" del disco de vinilo */
+.colosal-event-card img::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    background-color: var(--color-pastel-purple);
+    border-radius: 50%;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5), 0 0 10px var(--color-pastel-purple);
+}
+
+.colosal-event-card p {
+    text-align: center;
+    width: 100%;
+    padding: 0 15px;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 2;
+    margin: 0;
+}
+
+.colosal-event-card .event-date {
+    padding: 10px 15px 5px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-pastel-purple);
+}
+
+.colosal-event-card .event-location {
+    padding: 0 15px 15px;
+    font-size: 0.9rem;
+    color: var(--color-off-white);
+    font-weight: 500;
+}
+
+.colosal-event-card .view-concert-btn {
+    margin: 0 15px 15px;
+    width: calc(100% - 30px);
+    padding: 10px;
+    background: var(--color-pastel-purple);
+    color: var(--color-black);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.colosal-event-card .view-concert-btn:hover {
+    background-color: #c288c2;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .colosal-title {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .colosal-title {
+        font-size: 2rem;
+    }
+}
+
+
+/*=====================================
+  AJUSTE ESPECÍFICO PARA TÍTULO EN MÓVIL
+  =====================================*/
+
+@media (max-width: 768px) {
+    /* Ajustes para tabletas y móviles */
+    .colosal-upcoming-events {
+        padding-top: 1rem;
+        padding-bottom: 2rem;
+    }
+    
+    .colosal-title {
+        font-size: 2.2rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.3; /* Aumenta el espaciado entre las líneas */
+    }
+}
+
+@media (max-width: 480px) {
+    /* Ajustes específicos para móviles pequeños */
+    .colosal-upcoming-events {
+        padding-top: 0.5rem;
+        padding-bottom: 1.5rem;
+    }
+    
+    .colosal-title {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        line-height: 1.3; /* Aumenta el espaciado entre las líneas */
+    }
+}
